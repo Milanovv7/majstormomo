@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Majstor MOMO</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./Majstor_MOMO.png">
+    <style>
+        /* System Theme Tracking */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --text-color: #ffffff;
+                --glass-bg: rgba(18, 18, 18, 0.7);
+                --border-color: rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Top Bar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+        }
+
+        .logo {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* Hamburger Menu (2 lines morphing into X) */
+        .hamburger {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            z-index: 1001;
+        }
+
+        .line1, .line2 {
+            width: 25px;
+            height: 2px;
+            background-color: var(--text-color);
+            margin: 4px 0;
+            transition: 0.4s ease;
+        }
+
+        .hamburger.active .line1 {
+            transform: translateY(5px) rotate(45deg);
+        }
+
+        .hamburger.active .line2 {
+            transform: translateY(-5px) rotate(-45deg);
+        }
+
+        /* Dropdown Menu */
+        .nav-menu {
+            position: fixed;
+            top: 70px;
+            right: -100%;
+            width: 100%;
+            max-width: 300px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-left: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            transition: right 0.4s ease-in-out;
+            z-index: 999;
+            border-bottom-left-radius: 15px;
+        }
+
+        .nav-menu.active {
+            right: 0;
+        }
+
+        .nav-menu a, .nav-menu .lang-toggle {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 18px;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            display: block;
+        }
+
+        .nav-menu a:last-child {
+            border-bottom: none;
+        }
+
+        /* Language Submenu */
+        .lang-options {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding-left: 15px;
+        }
+
+        .lang-options.active {
+            max-height: 100px;
+        }
+
+        .lang-options div {
+            padding: 10px 0;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        
+        .lang-options div:hover {
+            opacity: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 70px;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .hero img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .hero h1 {
+            margin-top: 25px;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        /* Slideshow Section */
+        .slideshow-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            margin: 40px auto;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .slides-container {
+            display: flex;
+            transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+            width: 100%;
+        }
+
+        .slide {
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .slide img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* Bottom Fixed Slider Controls */
+        .slider-controls {
+            position: fixed;
+            bottom: -80px; 
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color);
+            padding: 10px 25px;
+            border-radius: 30px;
+            display: flex;
+            gap: 40px;
+            z-index: 998;
+            transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .slider-controls.visible {
+            bottom: 30px;
+        }
+
+        .slider-controls button {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            transition: transform 0.2s;
+        }
+
+        .slider-controls button:active {
+            transform: scale(0.9);
+        }
+
+        /* Bottom Social Links & Action Buttons */
+        .social-bottom {
+            text-align: center;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .social-bottom a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 18px;
+            border: 1px solid var(--text-color);
+            padding: 10px 30px;
+            border-radius: 25px;
+            width: 220px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .social-bottom a.call-btn {
+            background: var(--text-color);
+            color: var(--bg-color);
+            font-weight: 600;
+        }
+
+        .social-bottom a:hover {
+            opacity: 0.85;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            opacity: 0.7;
+            margin-bottom: 20px;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 20px; }
+            .nav-menu { max-width: 250px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <img src="./Majstor_MOMO.png" alt="Majstor MOMO Logo" class="logo">
+        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+            <div class="line1"></div>
+            <div class="line2"></div>
+        </div>
+    </nav>
+
+    <!-- Dropdown Menu -->
+    <div class="nav-menu" id="navMenu">
+        <div class="lang-container">
+            <div class="lang-toggle" onclick="toggleLang()" id="langLabel" data-key="langLabel">Јазик ▾</div>
+            <div class="lang-options" id="langOptions">
+                <div onclick="setLang('mk')" data-key="macedonian">Македонски</div>
+                <div onclick="setLang('en')" data-key="english">English</div>
+            </div>
+        </div>
+        <a href="tel:071267392" data-key="call">Повикај: 071 267 392</a>
+        <a href="https://www.facebook.com/majstor.momo" target="_blank" data-key="facebook">Facebook</a>
+        <a href="https://www.instagram.com/majstor.momo/" target="_blank" data-key="instagram">Instagram</a>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <img src="./650384957_122137742456990903_8666413726209295700_n.png" alt="МАЈСТОР МОМО">
+            <h1 data-key="welcome">Добредојдовте кај Мајстор МОМО! Откријте повеќе сега.</h1>
+        </section>
+
+        <!-- Slideshow Section -->
+        <section class="slideshow-wrapper" id="slideshowSection">
+            <div class="slides-container" id="slidesContainer">
+                <div class="slide"><img src="./748527858_122151549044990903_6627708820260192881_n.png" alt="Slide 1"></div>
+                <div class="slide"><img src="./728427427_122149814618990903_459510204965844841_n.png" alt="Slide 2"></div>
+                <div class="slide"><img src="./729375832_122149728146990903_7126979302070628647_n.png" alt="Slide 3"></div>
+                <div class="slide"><img src="./728325646_122149553780990903_1360434851943652120_n.png" alt="Slide 4"></div>
+                <div class="slide"><img src="./726645514_122149298462990903_5256951602720334585_n.png" alt="Slide 5"></div>
+                <div class="slide"><img src="./726495291_122149139018990903_742751391020013363_n.png" alt="Slide 6"></div>
+                <div class="slide"><img src="./724424976_122148973760990903_8986834090366905422_n.png" alt="Slide 7"></div>
+                <div class="slide"><img src="./722305195_122148545264990903_7157427341935603887_n.png" alt="Slide 8"></div>
+            </div>
+        </section>
+
+        <!-- Bottom Social & Direct Action Section -->
+        <section class="social-bottom">
+            <a href="tel:071267392" class="call-btn" data-key="call">Повикај: 071 267 392</a>
+            <a href="https://www.facebook.com/majstor.momo" target="_blank" data-key="facebook">Facebook</a>
+            <a href="https://www.instagram.com/majstor.momo/" target="_blank" data-key="instagram">Instagram</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer" data-key="footerText">
+        ©2026 Мајстор МОМО Пехчево | Изработено со љубов од MilanovvDEV
+    </footer>
+
+    <!-- Fixed Glassmorphism Slider Controls -->
+    <div class="slider-controls" id="sliderControls">
+        <button onclick="userChangeSlide(-1)">&#10094;</button>
+        <button onclick="userChangeSlide(1)">&#10095;</button>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        const langOptions = document.getElementById('langOptions');
+
+        function toggleMenu() {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        }
+
+        function toggleLang() {
+            langOptions.classList.toggle('active');
+        }
+
+        // Close hamburger menu when clicking outside
+        document.addEventListener('click', (event) => {
+            const isClickInsideMenu = navMenu.contains(event.target);
+            const isClickOnHamburger = hamburger.contains(event.target);
+
+            if (!isClickInsideMenu && !isClickOnHamburger && navMenu.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
+        });
+
+        const translations = {
+            en: {
+                langLabel: "Language ▾",
+                english: "English",
+                macedonian: "Macedonian",
+                welcome: "Welcome to Majstor MOMO! Discover more now.",
+                call: "Call: 071 267 392",
+                facebook: "Facebook",
+                instagram: "Instagram",
+                footerText: "©2026 Majstor MOMO Pehcevo | Made with love by MilanovvDEV"
+            },
+            mk: {
+                langLabel: "Јазик ▾",
+                english: "Англиски",
+                macedonian: "Македонски",
+                welcome: "Добредојдовте кај Мајстор МОМО! Откријте повеќе сега.",
+                call: "Повикај: 071 267 392",
+                facebook: "Facebook",
+                instagram: "Instagram",
+                footerText: "©2026 Мајстор МОМО Пехчево | Изработено со љубов од MilanovvDEV"
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('majstor_momo_lang', lang);
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+            langOptions.classList.remove('active');
+            
+            if(window.innerWidth <= 600 && navMenu.classList.contains('active')) {
+                toggleMenu();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // Macedonian is set as the default fallback language
+            const savedLang = localStorage.getItem('majstor_momo_lang') || 'mk';
+            setLang(savedLang);
+        });
+
+        /* Slideshow & Auto-Scroll Logic */
+        let currentSlide = 0;
+        const slidesContainer = document.getElementById('slidesContainer');
+        const totalSlides = document.querySelectorAll('.slide').length;
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            
+            if (currentSlide < 0) {
+                currentSlide = totalSlides - 1;
+            } else if (currentSlide >= totalSlides) {
+                currentSlide = 0;
+            }
+            
+            slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        let autoScrollTimer = setInterval(() => {
+            changeSlide(1);
+        }, 3000);
+
+        function userChangeSlide(direction) {
+            if (autoScrollTimer) {
+                clearInterval(autoScrollTimer);
+                autoScrollTimer = null;
+            }
+            changeSlide(direction);
+        }
+
+        /* Observer for Floating Arrow Controls Visibility */
+        const sliderControls = document.getElementById('sliderControls');
+        const slideshowSection = document.getElementById('slideshowSection');
+        const footer = document.getElementById('footer');
+
+        let isSlideshowInView = false;
+        let isFooterInView = false;
+
+        function updateControlsVisibility() {
+            if (isSlideshowInView && !isFooterInView) {
+                sliderControls.classList.add('visible');
+            } else {
+                sliderControls.classList.remove('visible');
+            }
+        }
+
+        const slideshowObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                isSlideshowInView = entry.isIntersecting;
+                updateControlsVisibility();
+            });
+        }, { threshold: 0.15 });
+
+        const footerObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                isFooterInView = entry.isIntersecting;
+                updateControlsVisibility();
+            });
+        }, { threshold: 0.1 });
+
+        slideshowObserver.observe(slideshowSection);
+        footerObserver.observe(footer);
+    </script>
+</body>
+</html>
