@@ -11,7 +11,7 @@
         :root {
             --bg-color: #ffffff;
             --text-color: #1a1a1a;
-            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-bg: rgba(255, 255, 255, 0.85);
             --border-color: rgba(0, 0, 0, 0.1);
         }
 
@@ -19,7 +19,7 @@
             :root {
                 --bg-color: #121212;
                 --text-color: #ffffff;
-                --glass-bg: rgba(18, 18, 18, 0.7);
+                --glass-bg: rgba(18, 18, 18, 0.85);
                 --border-color: rgba(255, 255, 255, 0.1);
             }
         }
@@ -28,7 +28,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
@@ -38,22 +38,35 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Top Bar */
+        /* Top Bar Container - Default 70px Height */
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
+            height: auto;
+            max-height: 70px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Smooth Expansion when Open */
+        .navbar.active {
+            max-height: 350px;
+        }
+
+        .nav-header {
             height: 70px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border-color);
-            z-index: 1000;
+            width: 100%;
         }
 
         .logo {
@@ -79,7 +92,7 @@
             height: 2px;
             background-color: var(--text-color);
             margin: 4px 0;
-            transition: 0.4s ease;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .hamburger.active .line1 {
@@ -90,43 +103,40 @@
             transform: translateY(-5px) rotate(-45deg);
         }
 
-        /* Dropdown Menu */
-        .nav-menu {
-            position: fixed;
-            top: 70px;
-            right: -100%;
-            width: 100%;
-            max-width: 300px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-left: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
+        /* Animated Inner Menu Content */
+        .nav-content {
+            padding: 10px 25px 25px 25px;
             display: flex;
             flex-direction: column;
-            padding: 20px;
-            transition: right 0.4s ease-in-out;
-            z-index: 999;
-            border-bottom-left-radius: 15px;
         }
 
-        .nav-menu.active {
-            right: 0;
-        }
-
-        .nav-menu a, .nav-menu .lang-toggle {
+        .nav-item {
             color: var(--text-color);
             text-decoration: none;
             font-size: 18px;
-            padding: 15px 0;
+            font-weight: 500;
+            padding: 12px 0;
             border-bottom: 1px solid var(--border-color);
             cursor: pointer;
-            display: block;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        .nav-menu a:last-child {
+        .nav-item:last-child {
             border-bottom: none;
         }
+
+        /* Staggered Fade-In when Menu Opens */
+        .navbar.active .nav-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .navbar.active .nav-item:nth-child(1) { transition-delay: 0.10s; }
+        .navbar.active .nav-item:nth-child(2) { transition-delay: 0.15s; }
+        .navbar.active .nav-item:nth-child(3) { transition-delay: 0.20s; }
+        .navbar.active .nav-item:nth-child(4) { transition-delay: 0.25s; }
 
         /* Language Submenu */
         .lang-options {
@@ -141,13 +151,13 @@
         }
 
         .lang-options div {
-            padding: 10px 0;
+            padding: 8px 0;
             cursor: pointer;
             font-size: 16px;
             color: var(--text-color);
             opacity: 0.8;
         }
-        
+
         .lang-options div:hover {
             opacity: 1;
         }
@@ -255,7 +265,7 @@
             border: 1px solid var(--text-color);
             padding: 10px 30px;
             border-radius: 25px;
-            width: 220px;
+            width: 250px;
             transition: background 0.3s, color 0.3s;
         }
 
@@ -281,34 +291,34 @@
         /* Mobile Adjustments */
         @media (max-width: 600px) {
             .hero h1 { font-size: 20px; }
-            .nav-menu { max-width: 250px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Top Navigation Bar -->
-    <nav class="navbar">
-        <img src="./Majstor_MOMO.png" alt="Majstor MOMO Logo" class="logo">
-        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-            <div class="line1"></div>
-            <div class="line2"></div>
-        </div>
-    </nav>
-
-    <!-- Dropdown Menu -->
-    <div class="nav-menu" id="navMenu">
-        <div class="lang-container">
-            <div class="lang-toggle" onclick="toggleLang()" id="langLabel" data-key="langLabel">Јазик ▾</div>
-            <div class="lang-options" id="langOptions">
-                <div onclick="setLang('mk')" data-key="macedonian">Македонски</div>
-                <div onclick="setLang('en')" data-key="english">English</div>
+    <!-- Top Bar Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-header">
+            <img src="./Majstor_MOMO.png" alt="Majstor MOMO Logo" class="logo">
+            <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+                <div class="line1"></div>
+                <div class="line2"></div>
             </div>
         </div>
-        <a href="tel:071267392" data-key="call">Повикај: 071 267 392</a>
-        <a href="https://www.facebook.com/majstor.momo" target="_blank" data-key="facebook">Facebook</a>
-        <a href="https://www.instagram.com/majstor.momo/" target="_blank" data-key="instagram">Instagram</a>
-    </div>
+
+        <div class="nav-content">
+            <div class="nav-item lang-container">
+                <div class="lang-toggle" onclick="toggleLang()" id="langLabel" data-key="langLabel">Јазик ▾</div>
+                <div class="lang-options" id="langOptions">
+                    <div onclick="setLang('mk')" data-key="macedonian">Македонски</div>
+                    <div onclick="setLang('en')" data-key="english">English</div>
+                </div>
+            </div>
+            <a href="tel:071267392" class="nav-item" data-key="call">Повикај: +389 71 267 392</a>
+            <a href="https://www.facebook.com/majstor.momo" target="_blank" class="nav-item" data-key="facebook">Facebook</a>
+            <a href="https://www.instagram.com/majstor.momo/" target="_blank" class="nav-item" data-key="instagram">Instagram</a>
+        </div>
+    </nav>
 
     <!-- Main Content -->
     <main>
@@ -332,9 +342,9 @@
             </div>
         </section>
 
-        <!-- Bottom Social & Direct Action Section -->
+        <!-- Bottom Social Section -->
         <section class="social-bottom">
-            <a href="tel:071267392" class="call-btn" data-key="call">Повикај: 071 267 392</a>
+            <a href="tel:071267392" class="call-btn" data-key="call">Повикај: +389 71 267 392</a>
             <a href="https://www.facebook.com/majstor.momo" target="_blank" data-key="facebook">Facebook</a>
             <a href="https://www.instagram.com/majstor.momo/" target="_blank" data-key="instagram">Instagram</a>
         </section>
@@ -345,7 +355,7 @@
         ©2026 Мајстор МОМО Пехчево | Изработено со љубов од MilanovvDEV
     </footer>
 
-    <!-- Fixed Glassmorphism Slider Controls -->
+    <!-- Fixed Slider Controls -->
     <div class="slider-controls" id="sliderControls">
         <button onclick="userChangeSlide(-1)">&#10094;</button>
         <button onclick="userChangeSlide(1)">&#10095;</button>
@@ -354,26 +364,36 @@
     <!-- Scripts -->
     <script>
         const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('navMenu');
+        const navbar = document.getElementById('navbar');
         const langOptions = document.getElementById('langOptions');
 
         function toggleMenu() {
             hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
+            navbar.classList.toggle('active');
+            
+            if (!navbar.classList.contains('active')) {
+                langOptions.classList.remove('active');
+            }
         }
 
         function toggleLang() {
             langOptions.classList.toggle('active');
+            
+            if (langOptions.classList.contains('active')) {
+                navbar.style.maxHeight = '420px';
+            } else {
+                navbar.style.maxHeight = '350px';
+            }
         }
 
-        // Close hamburger menu when clicking outside
         document.addEventListener('click', (event) => {
-            const isClickInsideMenu = navMenu.contains(event.target);
-            const isClickOnHamburger = hamburger.contains(event.target);
+            const isClickInsideNavbar = navbar.contains(event.target);
 
-            if (!isClickInsideMenu && !isClickOnHamburger && navMenu.classList.contains('active')) {
+            if (!isClickInsideNavbar && navbar.classList.contains('active')) {
                 hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
+                navbar.classList.remove('active');
+                navbar.style.maxHeight = '';
+                langOptions.classList.remove('active');
             }
         });
 
@@ -383,7 +403,7 @@
                 english: "English",
                 macedonian: "Macedonian",
                 welcome: "Welcome to Majstor MOMO! Discover more now.",
-                call: "Call: 071 267 392",
+                call: "Call: +389 71 267 392",
                 facebook: "Facebook",
                 instagram: "Instagram",
                 footerText: "©2026 Majstor MOMO Pehcevo | Made with love by MilanovvDEV"
@@ -393,7 +413,7 @@
                 english: "Англиски",
                 macedonian: "Македонски",
                 welcome: "Добредојдовте кај Мајстор МОМО! Откријте повеќе сега.",
-                call: "Повикај: 071 267 392",
+                call: "Повикај: +389 71 267 392",
                 facebook: "Facebook",
                 instagram: "Instagram",
                 footerText: "©2026 Мајстор МОМО Пехчево | Изработено со љубов од MilanovvDEV"
@@ -409,19 +429,19 @@
                 }
             });
             langOptions.classList.remove('active');
+            navbar.style.maxHeight = '';
             
-            if(window.innerWidth <= 600 && navMenu.classList.contains('active')) {
+            if (navbar.classList.contains('active')) {
                 toggleMenu();
             }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Macedonian is set as the default fallback language
             const savedLang = localStorage.getItem('majstor_momo_lang') || 'mk';
             setLang(savedLang);
         });
 
-        /* Slideshow & Auto-Scroll Logic */
+        /* Slideshow Logic */
         let currentSlide = 0;
         const slidesContainer = document.getElementById('slidesContainer');
         const totalSlides = document.querySelectorAll('.slide').length;
@@ -450,7 +470,7 @@
             changeSlide(direction);
         }
 
-        /* Observer for Floating Arrow Controls Visibility */
+        /* Controls Observer */
         const sliderControls = document.getElementById('sliderControls');
         const slideshowSection = document.getElementById('slideshowSection');
         const footer = document.getElementById('footer');
