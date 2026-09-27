@@ -69,9 +69,12 @@
             transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Smooth Expansion when Open */
         .navbar.active {
-            max-height: 480px;
+            max-height: 520px;
+        }
+
+        .navbar.active.lang-open {
+            max-height: 600px;
         }
 
         .nav-header {
@@ -91,39 +94,52 @@
             user-select: none;
         }
 
-        /* Hamburger Menu (2 lines morphing into X) */
+        /* Scaled Up Hamburger Icon */
         .hamburger {
             cursor: pointer;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: 30px;
-            height: 30px;
+            width: 48px;
+            height: 48px;
             z-index: 1001;
+            position: relative;
+            margin-right: -10px;
         }
 
         .line1, .line2 {
-            width: 25px;
-            height: 2px;
+            width: 24px;
+            height: 2.5px;
             background-color: var(--text-color);
-            margin: 4px 0;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 2px;
+            position: absolute;
+            transition: transform 0.3s ease;
         }
 
+        .line1 {
+            transform: translateY(-6px);
+        }
+
+        .line2 {
+            transform: translateY(6px);
+        }
+
+        /* Direct morphing animation into X */
         .hamburger.active .line1 {
-            transform: translateY(5px) rotate(45deg);
+            transform: translateY(0) rotate(45deg);
         }
 
         .hamburger.active .line2 {
-            transform: translateY(-5px) rotate(-45deg);
+            transform: translateY(0) rotate(-45deg);
         }
 
-        /* Animated Inner Menu Content */
+        /* Inner Menu Content */
         .nav-content {
-            padding: 10px 25px 25px 25px;
+            padding: 10px 25px 30px 25px;
             display: flex;
             flex-direction: column;
+            gap: 4px;
         }
 
         .nav-item {
@@ -131,12 +147,22 @@
             text-decoration: none;
             font-size: 18px;
             font-weight: 500;
-            padding: 12px 0;
+            padding: 16px 0;
             border-bottom: 1px solid var(--border-color);
             cursor: pointer;
             opacity: 0;
             transform: translateY(-10px);
             transition: opacity 0.3s ease, transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .nav-item svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+            flex-shrink: 0;
         }
 
         /* Staggered Fade-In when Menu Opens */
@@ -151,28 +177,51 @@
         .navbar.active .nav-item:nth-child(4) { transition-delay: 0.20s; }
         .navbar.active .nav-item:nth-child(5) { transition-delay: 0.24s; }
 
-        /* Language Submenu */
+        .lang-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-bottom: 8px;
+        }
+
+        .lang-toggle {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+        }
+
+        /* Language Options Expansion */
         .lang-options {
             max-height: 0;
+            opacity: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            padding-left: 15px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding-left: 36px;
+            gap: 6px;
+            transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, margin-top 0.3s ease;
+            margin-top: 0;
         }
 
         .lang-options.active {
-            max-height: 100px;
+            max-height: 120px;
+            opacity: 1;
+            margin-top: 10px;
         }
 
         .lang-options div {
-            padding: 8px 0;
+            padding: 8px 12px;
             cursor: pointer;
             font-size: 16px;
             color: var(--text-color);
-            opacity: 0.8;
+            border-radius: 6px;
+            transition: background-color 0.2s;
         }
 
         .lang-options div:hover {
-            opacity: 1;
+            background-color: var(--border-color);
         }
 
         /* Theme Toggle Controls */
@@ -180,8 +229,9 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            gap: 15px;
-            padding-top: 15px;
+            gap: 16px;
+            padding-top: 20px;
+            padding-bottom: 10px;
             border-bottom: none;
         }
 
@@ -189,8 +239,8 @@
             background: none;
             border: 1px solid var(--border-color);
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -209,6 +259,23 @@
             background: var(--text-color);
             color: var(--bg-color);
             border-color: var(--text-color);
+        }
+
+        /* Computer / Phone System Icon Toggle */
+        .icon-desktop {
+            display: block;
+        }
+        .icon-mobile {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .icon-desktop {
+                display: none;
+            }
+            .icon-mobile {
+                display: block;
+            }
         }
 
         /* Hero Section */
@@ -315,10 +382,21 @@
             text-decoration: none;
             font-size: 18px;
             border: 1px solid var(--text-color);
-            padding: 10px 30px;
+            padding: 12px 30px;
             border-radius: 25px;
-            width: 250px;
+            width: 270px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             transition: background 0.3s, color 0.3s;
+        }
+
+        .social-bottom a svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            flex-shrink: 0;
         }
 
         .social-bottom a.call-btn {
@@ -360,21 +438,42 @@
 
         <div class="nav-content">
             <div class="nav-item lang-container">
-                <div class="lang-toggle" onclick="toggleLang()" id="langLabel" data-key="langLabel">Јазик ▾</div>
+                <div class="lang-toggle" onclick="toggleLang()">
+                    <!-- Globe Icon -->
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    <span id="langLabel" data-key="langLabel">Јазик ▾</span>
+                </div>
                 <div class="lang-options" id="langOptions">
                     <div onclick="setLang('mk')" data-key="macedonian">Македонски</div>
                     <div onclick="setLang('en')" data-key="english">English</div>
                 </div>
             </div>
-            <a href="tel:071267392" class="nav-item" data-key="call">Повикај: +389 71 267 392</a>
-            <a href="https://www.facebook.com/majstor.momo" target="_blank" class="nav-item" data-key="facebook">Facebook</a>
-            <a href="https://www.instagram.com/majstor.momo/" target="_blank" class="nav-item" data-key="instagram">Instagram</a>
+            
+            <a href="tel:071267392" class="nav-item">
+                <!-- Phone Icon -->
+                <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                <span data-key="call">Повикај: +389 71 267 392</span>
+            </a>
+            
+            <a href="https://www.facebook.com/majstor.momo" target="_blank" class="nav-item">
+                <!-- Facebook Icon -->
+                <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99H7.9v-2.89h2.54V9.8c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99C18.34 21.12 22 16.99 22 12z"/></svg>
+                <span data-key="facebook">Facebook</span>
+            </a>
+            
+            <a href="https://www.instagram.com/majstor.momo/" target="_blank" class="nav-item">
+                <!-- Instagram Icon -->
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                <span data-key="instagram">Instagram</span>
+            </a>
             
             <!-- Theme Mode Controls -->
             <div class="nav-item theme-toggle-wrapper">
                 <button class="theme-btn" id="btnThemeSystem" onclick="setTheme('system')" title="System Theme">
-                    <!-- Computer Icon -->
-                    <svg viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 5h16v11H4V5z"/></svg>
+                    <!-- Computer Icon (Desktop) -->
+                    <svg class="icon-desktop" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 5h16v11H4V5z"/></svg>
+                    <!-- Phone Icon (Mobile) -->
+                    <svg class="icon-mobile" viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
                 </button>
                 <button class="theme-btn" id="btnThemeLight" onclick="setTheme('light')" title="Light Mode">
                     <!-- Sun Icon -->
@@ -412,9 +511,23 @@
 
         <!-- Bottom Social Section -->
         <section class="social-bottom">
-            <a href="tel:071267392" class="call-btn" data-key="call">Повикај: +389 71 267 392</a>
-            <a href="https://www.facebook.com/majstor.momo" target="_blank" data-key="facebook">Facebook</a>
-            <a href="https://www.instagram.com/majstor.momo/" target="_blank" data-key="instagram">Instagram</a>
+            <a href="tel:071267392" class="call-btn">
+                <!-- Phone Icon -->
+                <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                <span data-key="call">Повикај: +389 71 267 392</span>
+            </a>
+            
+            <a href="https://www.facebook.com/majstor.momo" target="_blank">
+                <!-- Facebook Icon -->
+                <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99H7.9v-2.89h2.54V9.8c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99C18.34 21.12 22 16.99 22 12z"/></svg>
+                <span data-key="facebook">Facebook</span>
+            </a>
+            
+            <a href="https://www.instagram.com/majstor.momo/" target="_blank">
+                <!-- Instagram Icon -->
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                <span data-key="instagram">Instagram</span>
+            </a>
         </section>
     </main>
 
@@ -441,8 +554,8 @@
             if (isOpen) {
                 hamburger.classList.remove('active');
                 navbar.classList.remove('active');
+                navbar.classList.remove('lang-open');
                 langOptions.classList.remove('active');
-                navbar.style.maxHeight = '';
             } else {
                 hamburger.classList.add('active');
                 navbar.classList.add('active');
@@ -451,12 +564,7 @@
 
         function toggleLang() {
             langOptions.classList.toggle('active');
-            
-            if (langOptions.classList.contains('active')) {
-                navbar.style.maxHeight = '550px';
-            } else {
-                navbar.style.maxHeight = '480px';
-            }
+            navbar.classList.toggle('lang-open');
         }
 
         document.addEventListener('click', (event) => {
@@ -465,8 +573,8 @@
             if (!isClickInsideNavbar && navbar.classList.contains('active')) {
                 hamburger.classList.remove('active');
                 navbar.classList.remove('active');
+                navbar.classList.remove('lang-open');
                 langOptions.classList.remove('active');
-                navbar.style.maxHeight = '';
             }
         });
 
@@ -503,7 +611,7 @@
                 }
             });
             langOptions.classList.remove('active');
-            navbar.style.maxHeight = '';
+            navbar.classList.remove('lang-open');
             
             if (navbar.classList.contains('active')) {
                 toggleMenu();
