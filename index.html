@@ -45,6 +45,10 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -452,7 +456,7 @@
     <!-- Top Bar Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-header">
-            <img src="./Majstor_MOMO.png" alt="Majstor MOMO Logo" class="logo" onclick="window.location.reload();">
+            <img src="./Majstor_MOMO.png" alt="Majstor MOMO Logo" class="logo" onclick="resetToTop()">
             
             <!-- Uiverse.io Hamburger Menu -->
             <label class="hamburger" id="hamburgerLabel">
@@ -677,6 +681,11 @@
         let currentSlide = 0;
         const slidesContainer = document.getElementById('slidesContainer');
         const totalSlides = document.querySelectorAll('.slide').length;
+        let autoScrollTimer = null;
+
+        function updateSlidePosition() {
+            slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
 
         function changeSlide(direction) {
             currentSlide += direction;
@@ -687,12 +696,16 @@
                 currentSlide = 0;
             }
             
-            slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+            updateSlidePosition();
         }
 
-        let autoScrollTimer = setInterval(() => {
-            changeSlide(1);
-        }, 3000);
+        function startAutoScroll() {
+            if (!autoScrollTimer) {
+                autoScrollTimer = setInterval(() => {
+                    changeSlide(1);
+                }, 3000);
+            }
+        }
 
         function userChangeSlide(direction) {
             if (autoScrollTimer) {
@@ -700,6 +713,25 @@
                 autoScrollTimer = null;
             }
             changeSlide(direction);
+        }
+
+        startAutoScroll();
+
+        /* Logo Click: Scroll to top, reset slide to 1st image, & restart auto-scroll */
+        function resetToTop() {
+            if (navbar.classList.contains('active')) {
+                closeMenu();
+            }
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+
+            currentSlide = 0;
+            updateSlidePosition();
+
+            startAutoScroll();
         }
 
         /* Mobile Touch / Swipe Handling */
