@@ -94,44 +94,67 @@
             user-select: none;
         }
 
-        /* Scaled Up Hamburger Icon */
+        /* Uiverse.io Hamburger Menu Styling */
         .hamburger {
             cursor: pointer;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            width: 48px;
-            height: 48px;
+            justify-content: center;
             z-index: 1001;
-            position: relative;
-            margin-right: -10px;
+            margin-right: -8px;
         }
 
-        .line1, .line2 {
-            width: 24px;
-            height: 2.5px;
-            background-color: var(--text-color);
-            border-radius: 2px;
-            position: absolute;
-            transition: transform 0.3s ease;
+        .hamburger input {
+            display: none;
         }
 
-        .line1 {
-            transform: translateY(-6px);
+        .hamburger svg {
+            height: 2.6em;
+            transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .line2 {
-            transform: translateY(6px);
+        .line {
+            fill: none;
+            stroke: var(--text-color);
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 3;
+            transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+                        stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Direct morphing animation into X */
-        .hamburger.active .line1 {
-            transform: translateY(0) rotate(45deg);
+        .line-top-bottom {
+            stroke-dasharray: 12 63;
         }
 
-        .hamburger.active .line2 {
-            transform: translateY(0) rotate(-45deg);
+        .hamburger input:checked + svg {
+            transform: rotate(-45deg);
+        }
+
+        .hamburger input:checked + svg .line-top-bottom {
+            stroke-dasharray: 20 300;
+            stroke-dashoffset: -32.42;
+        }
+
+        /* Animated Backdrop Blur for Menu Opening */
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
         }
 
         /* Inner Menu Content */
@@ -430,10 +453,15 @@
     <nav class="navbar" id="navbar">
         <div class="nav-header">
             <img src="./Majstor_MOMO.png" alt="Majstor MOMO Logo" class="logo" onclick="window.location.reload();">
-            <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-                <div class="line1"></div>
-                <div class="line2"></div>
-            </div>
+            
+            <!-- Uiverse.io Hamburger Menu -->
+            <label class="hamburger" id="hamburgerLabel">
+                <input type="checkbox" id="menuCheckbox" onchange="toggleMenu()">
+                <svg viewBox="0 0 32 32">
+                    <path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"></path>
+                    <path class="line" d="M7 16 27 16"></path>
+                </svg>
+            </label>
         </div>
 
         <div class="nav-content">
@@ -487,6 +515,9 @@
         </div>
     </nav>
 
+    <!-- Animated Page Blur Overlay -->
+    <div class="backdrop" id="backdrop" onclick="closeMenu()"></div>
+
     <!-- Main Content -->
     <main>
         <!-- Hero Section -->
@@ -533,7 +564,7 @@
 
     <!-- Footer -->
     <footer id="footer" data-key="footerText">
-        ©2026 Мајстор МОМО Пехчево | Изработено со љубов од MilanovvDEV
+        ©<span id="currentYear"></span> Мајстор МОМО Пехчево | Изработено со љубов од MilanovvDEV
     </footer>
 
     <!-- Fixed Slider Controls -->
@@ -544,22 +575,26 @@
 
     <!-- Scripts -->
     <script>
-        const hamburger = document.getElementById('hamburger');
         const navbar = document.getElementById('navbar');
         const langOptions = document.getElementById('langOptions');
+        const menuCheckbox = document.getElementById('menuCheckbox');
+        const backdrop = document.getElementById('backdrop');
 
         function toggleMenu() {
-            const isOpen = navbar.classList.contains('active');
-
-            if (isOpen) {
-                hamburger.classList.remove('active');
-                navbar.classList.remove('active');
-                navbar.classList.remove('lang-open');
-                langOptions.classList.remove('active');
-            } else {
-                hamburger.classList.add('active');
+            if (menuCheckbox.checked) {
                 navbar.classList.add('active');
+                backdrop.classList.add('active');
+            } else {
+                closeMenu();
             }
+        }
+
+        function closeMenu() {
+            menuCheckbox.checked = false;
+            navbar.classList.remove('active');
+            navbar.classList.remove('lang-open');
+            langOptions.classList.remove('active');
+            backdrop.classList.remove('active');
         }
 
         function toggleLang() {
@@ -567,16 +602,8 @@
             navbar.classList.toggle('lang-open');
         }
 
-        document.addEventListener('click', (event) => {
-            const isClickInsideNavbar = navbar.contains(event.target);
-
-            if (!isClickInsideNavbar && navbar.classList.contains('active')) {
-                hamburger.classList.remove('active');
-                navbar.classList.remove('active');
-                navbar.classList.remove('lang-open');
-                langOptions.classList.remove('active');
-            }
-        });
+        /* Dynamic Calendar Year Generator */
+        const year = new Date().getFullYear();
 
         /* Translations System */
         const translations = {
@@ -588,7 +615,7 @@
                 call: "Call: +389 71 267 392",
                 facebook: "Facebook",
                 instagram: "Instagram",
-                footerText: "©2026 Majstor MOMO Pehcevo | Made with love by MilanovvDEV"
+                footerText: `©${year} Majstor MOMO Pehcevo | Made with love by MilanovvDEV`
             },
             mk: {
                 langLabel: "Јазик ▾",
@@ -598,7 +625,7 @@
                 call: "Повикај: +389 71 267 392",
                 facebook: "Facebook",
                 instagram: "Instagram",
-                footerText: "©2026 Мајстор МОМО Пехчево | Изработено со љубов од MilanovvDEV"
+                footerText: `©${year} Мајстор МОМО Пехчево | Изработено со љубов од MilanovvDEV`
             }
         };
 
@@ -614,7 +641,7 @@
             navbar.classList.remove('lang-open');
             
             if (navbar.classList.contains('active')) {
-                toggleMenu();
+                closeMenu();
             }
         }
 
