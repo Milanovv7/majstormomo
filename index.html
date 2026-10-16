@@ -456,7 +456,7 @@
     <!-- Top Bar Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-header">
-            <img src="./Majstor_MOMO.png" alt="Majstor MOMO Logo" class="logo" onclick="resetToTop()">
+            <img src="./Majstor_MOMO.png" alt="Majstor MOMO Logo" class="logo" onclick="handleLogoClick()">
             
             <!-- Uiverse.io Hamburger Menu -->
             <label class="hamburger" id="hamburgerLabel">
@@ -717,21 +717,26 @@
 
         startAutoScroll();
 
-        /* Logo Click: Scroll to top, reset slide to 1st image, & restart auto-scroll */
-        function resetToTop() {
+        /* Conditional Logo Click Handling */
+        function handleLogoClick() {
             if (navbar.classList.contains('active')) {
                 closeMenu();
             }
 
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            // If already at the top, refresh the entire site
+            if (window.scrollY === 0) {
+                window.location.reload();
+            } else {
+                // If scrolled down, scroll to top, reset slide to 1st image, and resume auto-scroll
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
 
-            currentSlide = 0;
-            updateSlidePosition();
-
-            startAutoScroll();
+                currentSlide = 0;
+                updateSlidePosition();
+                startAutoScroll();
+            }
         }
 
         /* Mobile Touch / Swipe Handling */
