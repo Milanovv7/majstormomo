@@ -736,6 +736,7 @@
             window.scrollTo(0, 0);
             splashScreen.classList.add('fade-out');
             document.body.classList.remove('splash-active');
+            document.body.style.overflow = ''; // Re-enable scrolling
         }
 
         function toggleMenu(button) {
