@@ -56,6 +56,112 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
+        body.menu-open {
+            overflow: hidden;
+        }
+
+        /* Splash / Welcome Screen Overlay with Entry Animation */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-color);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .splash-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .splash-logo {
+            height: 110px;
+            width: auto;
+            object-fit: contain;
+            margin-bottom: 25px;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+        }
+
+        .splash-screen h1 {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--text-color);
+            max-width: 600px;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+        }
+
+        .splash-content-box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 300px;
+            align-items: center;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+        }
+
+        .splash-btn {
+            background: var(--text-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 14px 35px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            margin-top: 10px;
+        }
+
+        /* Desktop Hover Effects */
+        .splash-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Remove Hover Effects on Mobile Only */
+        @media (max-width: 600px) {
+            .splash-btn:hover {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .splash-call-btn {
+            background: transparent;
+            color: var(--text-color);
+            border: 2px solid var(--text-color);
+            margin-bottom: 10px;
+        }
+
         /* Top Bar Container */
         .navbar {
             position: fixed;
@@ -98,46 +204,44 @@
             user-select: none;
         }
 
-        /* Uiverse.io Hamburger Menu Styling */
+        /* Custom Hamburger Menu Styling */
         .hamburger {
+            width: 50px;
+            height: 50px;
+            background: transparent;
+            border: none;
             cursor: pointer;
+            position: relative;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             z-index: 1001;
             margin-right: -8px;
         }
 
-        .hamburger input {
-            display: none;
+        .hamburger span {
+            position: absolute;
+            width: 35px;
+            height: 3px;
+            background: var(--text-color);
+            border-radius: 10px;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
 
-        .hamburger svg {
-            height: 2.6em;
-            transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+        .hamburger span:first-child {
+            transform: translateY(-6px);
         }
 
-        .line {
-            fill: none;
-            stroke: var(--text-color);
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            stroke-width: 3;
-            transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
-                        stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+        .hamburger span:last-child {
+            transform: translateY(6px);
         }
 
-        .line-top-bottom {
-            stroke-dasharray: 12 63;
+        .hamburger.active span:first-child {
+            transform: rotate(45deg);
         }
 
-        .hamburger input:checked + svg {
+        .hamburger.active span:last-child {
             transform: rotate(-45deg);
-        }
-
-        .hamburger input:checked + svg .line-top-bottom {
-            stroke-dasharray: 20 300;
-            stroke-dashoffset: -32.42;
         }
 
         /* Animated Backdrop Blur for Menu Opening */
@@ -367,10 +471,11 @@
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border: 1px solid var(--border-color);
-            padding: 10px 25px;
+            padding: 10px 20px;
             border-radius: 30px;
             display: flex;
-            gap: 40px;
+            align-items: center;
+            gap: 25px;
             z-index: 998;
             transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
@@ -384,10 +489,19 @@
             background: none;
             border: none;
             color: var(--text-color);
-            font-size: 24px;
+            font-size: 22px;
             cursor: pointer;
             padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: transform 0.2s;
+        }
+
+        .slider-controls button svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
         }
 
         .slider-controls button:active {
@@ -448,24 +562,39 @@
         /* Mobile Adjustments */
         @media (max-width: 600px) {
             .hero h1 { font-size: 20px; }
+            .splash-screen h1 { font-size: 22px; }
         }
     </style>
 </head>
 <body>
+
+    <!-- Welcome Splash Screen Overlay -->
+    <div class="splash-screen" id="splashScreen">
+        <img src="./Majstor_MOMO.png" alt="Majstor MOMO Logo" class="splash-logo">
+        <h1 data-key="splashWelcome">Добредојдовте кај Мајстор МОМО! Откријте повеќе сега.</h1>
+        <div class="splash-content-box">
+            <p style="font-size: 16px; font-weight: 500; margin-bottom: -4px;" data-key="splashOrderPrompt">Сакате да нарачате?</p>
+            <a href="tel:071267392" class="splash-btn splash-call-btn">
+                <!-- Phone Icon -->
+                <svg viewBox="0 0 24 24" style="width:20px; height:20px; fill:currentColor;"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                <span data-key="call">Повикај: +389 71 267 392</span>
+            </a>
+            <button class="splash-btn" onclick="dismissSplash()">
+                <span data-key="visitWebsite">Посетете ја веб страната</span>
+            </button>
+        </div>
+    </div>
 
     <!-- Top Bar Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-header">
             <img src="./Majstor_MOMO.png" alt="Majstor MOMO Logo" class="logo" onclick="handleLogoClick()">
             
-            <!-- Uiverse.io Hamburger Menu -->
-            <label class="hamburger" id="hamburgerLabel">
-                <input type="checkbox" id="menuCheckbox" onchange="toggleMenu()">
-                <svg viewBox="0 0 32 32">
-                    <path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"></path>
-                    <path class="line" d="M7 16 27 16"></path>
-                </svg>
-            </label>
+            <!-- Custom Hamburger Menu Button -->
+            <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu(this)">
+                <span></span>
+                <span></span>
+            </button>
         </div>
 
         <div class="nav-content">
@@ -571,34 +700,55 @@
         ©<span id="currentYear"></span> Мајстор МОМО Пехчево | Изработено со љубов од MilanovvDEV
     </footer>
 
-    <!-- Fixed Slider Controls -->
+    <!-- Fixed Slider Controls with Pause/Resume Button -->
     <div class="slider-controls" id="sliderControls">
-        <button onclick="userChangeSlide(-1)">&#10094;</button>
-        <button onclick="userChangeSlide(1)">&#10095;</button>
+        <button onclick="userChangeSlide(-1)" aria-label="Previous slide">&#10094;</button>
+        <button id="pausePlayBtn" onclick="togglePlayPause()" aria-label="Pause slideshow">
+            <!-- Pause Icon (Default) -->
+            <svg id="pauseIcon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            <!-- Play Icon (Hidden Initially) -->
+            <svg id="playIcon" viewBox="0 0 24 24" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button onclick="userChangeSlide(1)" aria-label="Next slide">&#10095;</button>
     </div>
 
     <!-- Scripts -->
     <script>
         const navbar = document.getElementById('navbar');
         const langOptions = document.getElementById('langOptions');
-        const menuCheckbox = document.getElementById('menuCheckbox');
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
         const backdrop = document.getElementById('backdrop');
+        const splashScreen = document.getElementById('splashScreen');
 
-        function toggleMenu() {
-            if (menuCheckbox.checked) {
+        function dismissSplash() {
+            splashScreen.classList.add('fade-out');
+        }
+
+        function toggleMenu(button) {
+            button.classList.toggle("active");
+            const isOpen = button.classList.contains("active");
+
+            button.setAttribute("aria-expanded", isOpen);
+            button.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+
+            if (isOpen) {
                 navbar.classList.add('active');
                 backdrop.classList.add('active');
+                document.body.classList.add('menu-open');
             } else {
                 closeMenu();
             }
         }
 
         function closeMenu() {
-            menuCheckbox.checked = false;
+            hamburgerBtn.classList.remove("active");
+            hamburgerBtn.setAttribute("aria-expanded", "false");
+            hamburgerBtn.setAttribute("aria-label", "Open menu");
             navbar.classList.remove('active');
             navbar.classList.remove('lang-open');
             langOptions.classList.remove('active');
             backdrop.classList.remove('active');
+            document.body.classList.remove('menu-open');
         }
 
         function toggleLang() {
@@ -612,6 +762,9 @@
         /* Translations System */
         const translations = {
             en: {
+                splashWelcome: "Welcome to Majstor MOMO! Discover more now.",
+                splashOrderPrompt: "Would you like to order?",
+                visitWebsite: "Visit Website",
                 langLabel: "Language ▾",
                 english: "English",
                 macedonian: "Macedonian",
@@ -622,6 +775,9 @@
                 footerText: `©${year} Majstor MOMO Pehcevo | Made with love by MilanovvDEV`
             },
             mk: {
+                splashWelcome: "Добредојдовте кај Мајстор МОМО! Откријте повеќе сега.",
+                splashOrderPrompt: "Сакате да нарачате?",
+                visitWebsite: "Посетете ја веб страната",
                 langLabel: "Јазик ▾",
                 english: "Англиски",
                 macedonian: "Македонски",
@@ -682,6 +838,7 @@
         const slidesContainer = document.getElementById('slidesContainer');
         const totalSlides = document.querySelectorAll('.slide').length;
         let autoScrollTimer = null;
+        let isPaused = false;
 
         function updateSlidePosition() {
             slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
@@ -705,13 +862,45 @@
                     changeSlide(1);
                 }, 3000);
             }
+            isPaused = false;
+            updatePlayPauseIcon();
         }
 
-        function userChangeSlide(direction) {
+        function stopAutoScroll() {
             if (autoScrollTimer) {
                 clearInterval(autoScrollTimer);
                 autoScrollTimer = null;
             }
+            isPaused = true;
+            updatePlayPauseIcon();
+        }
+
+        function togglePlayPause() {
+            if (isPaused) {
+                startAutoScroll();
+            } else {
+                stopAutoScroll();
+            }
+        }
+
+        function updatePlayPauseIcon() {
+            const pauseIcon = document.getElementById('pauseIcon');
+            const playIcon = document.getElementById('playIcon');
+            const btn = document.getElementById('pausePlayBtn');
+
+            if (isPaused) {
+                pauseIcon.style.display = 'none';
+                playIcon.style.display = 'block';
+                btn.setAttribute('aria-label', 'Resume slideshow');
+            } else {
+                pauseIcon.style.display = 'block';
+                playIcon.style.display = 'none';
+                btn.setAttribute('aria-label', 'Pause slideshow');
+            }
+        }
+
+        function userChangeSlide(direction) {
+            stopAutoScroll();
             changeSlide(direction);
         }
 
