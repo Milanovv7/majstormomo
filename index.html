@@ -53,7 +53,6 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             overflow-x: hidden;
-            overflow: hidden; /* Locked until splash is dismissed */
             transition: background-color 0.3s, color 0.3s;
         }
 
@@ -736,7 +735,6 @@
             window.scrollTo(0, 0);
             splashScreen.classList.add('fade-out');
             document.body.classList.remove('splash-active');
-            document.body.style.overflow = ''; // Re-enable scrolling
         }
 
         function toggleMenu(button) {
