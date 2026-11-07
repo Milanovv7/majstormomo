@@ -418,7 +418,7 @@
             background-color: var(--border-color);
         }
 
-        /* Theme Toggle Controls & Integrated Zoom Row */
+        /* Theme Toggle Controls & Integrated Splash Setting Row */
         .theme-toggle-wrapper {
             display: flex;
             align-items: center;
@@ -461,28 +461,22 @@
             border-color: var(--text-color);
         }
 
-        /* Mobile Zoom Setting Container (Integrated in Same Row, Mobile Only) */
-        .zoom-inline-container {
-            display: none;
+        /* Splash Screen Setting Container (Toggle Row) */
+        .splash-setting-container {
+            display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        @media (max-width: 768px) {
-            .zoom-inline-container {
-                display: flex;
-            }
-        }
-
-        .zoom-label {
+        .splash-setting-label {
             font-size: 15px;
             font-weight: 500;
             color: var(--text-color);
             white-space: nowrap;
         }
 
-        /* Custom Switch Toggle */
-        .zoom-switch {
+        /* Custom Switch Toggle with Checkmark */
+        .splash-switch {
             position: relative;
             display: inline-block;
             width: 48px;
@@ -490,13 +484,13 @@
             flex-shrink: 0;
         }
 
-        .zoom-switch input {
+        .splash-switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
 
-        .zoom-slider {
+        .splash-slider {
             position: absolute;
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -505,7 +499,7 @@
             border-radius: 24px;
         }
 
-        .zoom-slider:before {
+        .splash-slider:before {
             position: absolute;
             content: "";
             height: 18px;
@@ -516,14 +510,18 @@
             transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             border-radius: 50%;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .zoom-switch input:checked + .zoom-slider {
+        .splash-switch input:checked + .splash-slider {
             background-color: var(--toggle-active-bg);
         }
 
-        .zoom-switch input:checked + .zoom-slider:before {
+        .splash-switch input:checked + .splash-slider:before {
             transform: translateX(24px);
+            content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="11" height="11" fill="%231a1a1a"><path d="M9 16.2l-3.5-3.5L4 14.2l5 5 12-12-1.4-1.4z"/></svg>');
         }
 
         .icon-desktop {
@@ -748,7 +746,7 @@
         }
     </style>
 </head>
-<body class="splash-active">
+<body class="splash-active" id="bodyElement">
 
     <!-- Welcome Splash Screen Overlay -->
     <div class="splash-screen" id="splashScreen">
@@ -824,7 +822,7 @@
                 <span data-key="instagram">Instagram</span>
             </a>
             
-            <!-- Theme Mode Controls & Integrated Zoom Toggle Row -->
+            <!-- Theme Mode Controls & Integrated Splash Screen Setting Row -->
             <div class="nav-item theme-toggle-wrapper">
                 <div class="theme-buttons-group">
                     <button class="theme-btn" id="btnThemeSystem" onclick="setTheme('system')" title="System Theme">
@@ -843,12 +841,12 @@
                     </button>
                 </div>
 
-                <!-- Pinch to Zoom Inline Container (Mobile Only) -->
-                <div class="zoom-inline-container">
-                    <span class="zoom-label">Pinch to zoom</span>
-                    <label class="zoom-switch">
-                        <input type="checkbox" id="zoomToggle" onchange="toggleZoom(this)">
-                        <span class="zoom-slider"></span>
+                <!-- Splash Screen Setting Container (Toggle) -->
+                <div class="splash-setting-container">
+                    <span class="splash-setting-label" data-key="splashToggleLabel">Splash</span>
+                    <label class="splash-switch">
+                        <input type="checkbox" id="splashToggle" onchange="toggleSplashSetting(this)" checked>
+                        <span class="splash-slider"></span>
                     </label>
                 </div>
             </div>
@@ -936,6 +934,16 @@
 
         // Ensure page starts at top on load
         window.scrollTo(0, 0);
+
+        // Check Splash Screen setting preference on startup
+        const savedSplashSetting = localStorage.getItem('majstor_momo_splash');
+        const isSplashEnabled = savedSplashSetting === null ? true : (savedSplashSetting === 'enabled');
+
+        if (!isSplashEnabled) {
+            // Remove splash screen overlay instantly
+            splashScreen.style.display = 'none';
+            document.body.classList.remove('splash-active');
+        }
 
         function dismissSplash() {
             window.scrollTo(0, 0);
@@ -1064,15 +1072,12 @@
         navbar.addEventListener('touchend', endPullGesture, { passive: true });
         navbar.addEventListener('touchcancel', endPullGesture, { passive: true });
 
-        /* Pinch to Zoom Toggle Management */
-        function toggleZoom(checkbox) {
-            const viewportMeta = document.getElementById('viewportMeta');
+        /* Splash Screen Toggle Management */
+        function toggleSplashSetting(checkbox) {
             if (checkbox.checked) {
-                viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
-                localStorage.setItem('majstor_momo_zoom', 'enabled');
+                localStorage.setItem('majstor_momo_splash', 'enabled');
             } else {
-                viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
-                localStorage.setItem('majstor_momo_zoom', 'disabled');
+                localStorage.setItem('majstor_momo_splash', 'disabled');
             }
         }
 
@@ -1097,6 +1102,7 @@
                 facebook: "Facebook",
                 instagram: "Instagram",
                 alreadyOnTopMsg: "Веќе сте на врвот",
+                splashToggleLabel: "Splash",
                 footerText: `©${year} Мајстор МОМО Пехчево | Изработено со љубов од MilanovvDEV`,
                 captions: [
                     "Прецизност во секој милиметар.",
@@ -1125,6 +1131,7 @@
                 facebook: "Facebook",
                 instagram: "Instagram",
                 alreadyOnTopMsg: "You're already on top",
+                splashToggleLabel: "Splash",
                 footerText: `©${year} Majstor MOMO Pehcevo | Made with love by MilanovvDEV`,
                 captions: [
                     "Precision in every millimeter.",
@@ -1153,6 +1160,7 @@
                 facebook: "Facebook",
                 instagram: "Instagram",
                 alreadyOnTopMsg: "Sie sind bereits ganz oben",
+                splashToggleLabel: "Splash",
                 footerText: `©${year} Majstor MOMO Pehcevo | Mit Liebe gemacht von MilanovvDEV`,
                 captions: [
                     "Präzision in jedem Millimeter.",
@@ -1181,6 +1189,7 @@
                 facebook: "Facebook",
                 instagram: "Instagram",
                 alreadyOnTopMsg: "Већ сте на врху",
+                splashToggleLabel: "Splash",
                 footerText: `©${year} Мајстор МОМО Пехчево | Израђено са љубављу од MilanovvDEV`,
                 captions: [
                     "Прецизност у сваком милиметру.",
@@ -1209,6 +1218,7 @@
                 facebook: "Facebook",
                 instagram: "Instagram",
                 alreadyOnTopMsg: "Вече сте на върха",
+                splashToggleLabel: "Splash",
                 footerText: `©${year} Майстор МОМО Пехчево | Създадено с любов от MilanovvDEV`,
                 captions: [
                     "Превъзходство във всеки милиметър.",
@@ -1237,6 +1247,7 @@
                 facebook: "Facebook",
                 instagram: "Instagram",
                 alreadyOnTopMsg: "Jeni tashmë në krye",
+                splashToggleLabel: "Splash",
                 footerText: `©${year} Master MOMO Pehçevo | Krijuar me dashuri nga MilanovvDEV`,
                 captions: [
                     "Saktësi në çdo milimetër.",
@@ -1296,10 +1307,8 @@
             const savedTheme = localStorage.getItem('majstor_momo_theme') || 'system';
             setTheme(savedTheme);
 
-            const savedZoom = localStorage.getItem('majstor_momo_zoom') || 'enabled';
-            const zoomToggle = document.getElementById('zoomToggle');
-            zoomToggle.checked = (savedZoom === 'enabled');
-            document.getElementById('viewportMeta').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
+            const splashToggle = document.getElementById('splashToggle');
+            splashToggle.checked = isSplashEnabled;
 
             updateCaptionText(0, 'none');
         });
