@@ -989,6 +989,13 @@
         /* Pull-Down-to-Open Hamburger Menu Gesture Logic (Mobile Only) */
         let pullStartY = 0;
         let isPulling = false;
+        let isGestureActive = false;
+
+        function preventScrollRefresh(e) {
+            if (isGestureActive) {
+                e.preventDefault();
+            }
+        }
 
         navbar.addEventListener('touchstart', (e) => {
             if (window.innerWidth > 768) return; // Mobile only
@@ -996,6 +1003,7 @@
 
             pullStartY = e.touches[0].clientY;
             isPulling = true;
+            isGestureActive = false;
         }, { passive: true });
 
         navbar.addEventListener('touchmove', (e) => {
@@ -1004,6 +1012,11 @@
             const deltaY = currentY - pullStartY;
 
             if (deltaY > 0) {
+                if (!isGestureActive) {
+                    isGestureActive = true;
+                    window.addEventListener('touchmove', preventScrollRefresh, { passive: false });
+                }
+
                 const newHeight = Math.min(70 + deltaY, 620);
                 navbar.classList.add('pulling');
                 navbar.style.maxHeight = `${newHeight}px`;
@@ -1013,16 +1026,22 @@
                 backdrop.style.opacity = progress;
                 backdrop.style.pointerEvents = 'auto';
             }
-        }, { passive: true });
+        }, { passive: false });
 
-        navbar.addEventListener('touchend', (e) => {
+        const endPullGesture = (e) => {
             if (!isPulling) return;
             isPulling = false;
+            
+            if (isGestureActive) {
+                isGestureActive = false;
+                window.removeEventListener('touchmove', preventScrollRefresh);
+            }
+
             navbar.classList.remove('pulling');
             backdrop.style.opacity = '';
             backdrop.style.pointerEvents = '';
 
-            const endY = e.changedTouches[0].clientY;
+            const endY = e.changedTouches ? e.changedTouches[0].clientY : pullStartY;
             const pulledDistance = endY - pullStartY;
 
             if (pulledDistance > 60) {
@@ -1040,7 +1059,10 @@
                 navbar.style.maxHeight = '';
                 backdrop.classList.remove('active');
             }
-        });
+        };
+
+        navbar.addEventListener('touchend', endPullGesture, { passive: true });
+        navbar.addEventListener('touchcancel', endPullGesture, { passive: true });
 
         /* Pinch to Zoom Toggle Management (Hard-blocking double-tap & gesture zoom) */
         function toggleZoom(checkbox) {
@@ -1109,7 +1131,7 @@
                     "Прецизност во секој милиметар.",
                     "Игра со карактер.\nИзработка со душа.",
                     "Круг што привлекува погледи.",
-                    "Епоксидна смола.\nДизајн што остава впечаток.",
+                    "Епоксидна смола.\nДизајн што остава впитачок.",
                     "Кревет од масивно дрво.",
                     "Маса со карактер и стил.",
                     "Даски за сервирање\nСо епоксидна смола",
