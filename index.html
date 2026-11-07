@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="mk">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=no" id="viewportMeta">
     <title>Majstor MOMO</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="./Majstor_MOMO.png">
@@ -14,6 +13,8 @@
             --text-color: #1a1a1a;
             --glass-bg: rgba(255, 255, 255, 0.85);
             --border-color: rgba(0, 0, 0, 0.1);
+            --logo-src: url('./blacklogo.png');
+            --toggle-active-bg: #4a3319;
         }
 
         body.dark-theme {
@@ -21,6 +22,8 @@
             --text-color: #ffffff;
             --glass-bg: rgba(18, 18, 18, 0.85);
             --border-color: rgba(255, 255, 255, 0.1);
+            --logo-src: url('./whitelogo.png');
+            --toggle-active-bg: #4a3319;
         }
 
         body.light-theme {
@@ -28,6 +31,8 @@
             --text-color: #1a1a1a;
             --glass-bg: rgba(255, 255, 255, 0.85);
             --border-color: rgba(0, 0, 0, 0.1);
+            --logo-src: url('./blacklogo.png');
+            --toggle-active-bg: #4a3319;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -36,6 +41,8 @@
                 --text-color: #ffffff;
                 --glass-bg: rgba(18, 18, 18, 0.85);
                 --border-color: rgba(255, 255, 255, 0.1);
+                --logo-src: url('./whitelogo.png');
+                --toggle-active-bg: #4a3319;
             }
         }
 
@@ -98,7 +105,6 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -147,17 +153,15 @@
             justify-content: center;
             gap: 10px;
             transition: opacity 0.2s, transform 0.2s;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
             margin-top: 10px;
         }
 
-        /* Desktop Hover Effects */
         .splash-btn:hover {
             opacity: 0.9;
             transform: translateY(-2px);
         }
 
-        /* Remove Hover Effects on Mobile Only */
         @media (max-width: 600px) {
             .splash-btn:hover {
                 opacity: 1;
@@ -190,11 +194,11 @@
         }
 
         .navbar.active {
-            max-height: 520px;
+            max-height: 620px;
         }
 
         .navbar.active.lang-open {
-            max-height: 600px;
+            max-height: 780px;
         }
 
         .nav-header {
@@ -207,14 +211,15 @@
         }
 
         .logo {
-            height: 50px;
+            height: 24px;
             width: auto;
             object-fit: contain;
             cursor: pointer;
             user-select: none;
+            content: var(--logo-src);
         }
 
-        /* Top Notification Toast (Smooth Non-Bouncing Slide) */
+        /* Top Notification Toast */
         .top-toast {
             position: fixed;
             top: -60px;
@@ -226,7 +231,7 @@
             border-radius: 0 0 16px 16px;
             font-size: 15px;
             font-weight: 500;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
             z-index: 1050;
             transition: top 0.35s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
@@ -238,7 +243,7 @@
             top: 70px;
         }
 
-        /* Menu Toggle Styling */
+        /* 2-Line Menu Toggle Styling */
         .menu-toggle {
             width: 42px;
             height: 36px;
@@ -252,7 +257,6 @@
             cursor: pointer;
             padding: 0;
             z-index: 1001;
-            margin-right: -4px;
         }
 
         .menu-toggle span {
@@ -331,31 +335,16 @@
             flex-shrink: 0;
         }
 
-        /* Staggered Fade-In when Menu Opens */
         .navbar.active .nav-item {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .navbar.active .nav-item:nth-child(1) {
-            transition-delay: 0.08s;
-        }
-
-        .navbar.active .nav-item:nth-child(2) {
-            transition-delay: 0.12s;
-        }
-
-        .navbar.active .nav-item:nth-child(3) {
-            transition-delay: 0.16s;
-        }
-
-        .navbar.active .nav-item:nth-child(4) {
-            transition-delay: 0.20s;
-        }
-
-        .navbar.active .nav-item:nth-child(5) {
-            transition-delay: 0.24s;
-        }
+        .navbar.active .nav-item:nth-child(1) { transition-delay: 0.08s; }
+        .navbar.active .nav-item:nth-child(2) { transition-delay: 0.12s; }
+        .navbar.active .nav-item:nth-child(3) { transition-delay: 0.16s; }
+        .navbar.active .nav-item:nth-child(4) { transition-delay: 0.20s; }
+        .navbar.active .nav-item:nth-child(5) { transition-delay: 0.24s; }
 
         .lang-container {
             display: flex;
@@ -386,9 +375,10 @@
         }
 
         .lang-options.active {
-            max-height: 120px;
+            max-height: 280px;
             opacity: 1;
             margin-top: 10px;
+            overflow-y: auto;
         }
 
         .lang-options div {
@@ -404,15 +394,21 @@
             background-color: var(--border-color);
         }
 
-        /* Theme Toggle Controls */
+        /* Theme Toggle Controls & Integrated Zoom Row */
         .theme-toggle-wrapper {
             display: flex;
             align-items: center;
-            justify-content: flex-start;
-            gap: 16px;
+            justify-content: space-between;
+            gap: 12px;
             padding-top: 20px;
             padding-bottom: 10px;
             border-bottom: none;
+        }
+
+        .theme-buttons-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
         .theme-btn {
@@ -441,11 +437,74 @@
             border-color: var(--text-color);
         }
 
-        /* Computer / Phone System Icon Toggle */
+        /* Mobile Zoom Setting Container (Integrated in Same Row, Mobile Only) */
+        .zoom-inline-container {
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .zoom-inline-container {
+                display: flex;
+            }
+        }
+
+        .zoom-label {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-color);
+            white-space: nowrap;
+        }
+
+        /* Custom Switch Toggle */
+        .zoom-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .zoom-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .zoom-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--border-color);
+            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 24px;
+        }
+
+        .zoom-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--bg-color);
+            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .zoom-switch input:checked + .zoom-slider {
+            background-color: var(--toggle-active-bg);
+        }
+
+        .zoom-switch input:checked + .zoom-slider:before {
+            transform: translateX(24px);
+        }
+
         .icon-desktop {
             display: block;
         }
-
         .icon-mobile {
             display: none;
         }
@@ -454,7 +513,6 @@
             .icon-desktop {
                 display: none;
             }
-
             .icon-mobile {
                 display: block;
             }
@@ -463,7 +521,7 @@
         /* Hero Section */
         .hero {
             margin-top: 70px;
-            padding: 40px 20px;
+            padding: 40px 20px 70px 20px;
             text-align: center;
         }
 
@@ -471,7 +529,7 @@
             max-width: 100%;
             height: auto;
             border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
         .hero h1 {
@@ -485,11 +543,59 @@
             position: relative;
             width: 100%;
             max-width: 1000px;
-            margin: 40px auto;
+            margin: 10px auto 40px auto;
             overflow: hidden;
             border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             touch-action: pan-y;
+        }
+
+        /* Dynamic Slideshow Caption / Subtitle Wrapper */
+        .slide-caption-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto 12px auto;
+            padding: 0 20px;
+            min-height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .slide-caption {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.4;
+            white-space: pre-line;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        /* Directional Slide-Fade Animation States */
+        .slide-caption.fade-out-left {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+
+        .slide-caption.fade-out-right {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+
+        .slide-caption.fade-in-left {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+
+        .slide-caption.fade-in-right {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+
+        .slide-caption.active {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         .slides-container {
@@ -515,7 +621,7 @@
         /* Bottom Fixed Slider Controls */
         .slider-controls {
             position: fixed;
-            bottom: -80px;
+            bottom: -80px; 
             left: 50%;
             transform: translateX(-50%);
             background: var(--glass-bg);
@@ -529,7 +635,7 @@
             gap: 25px;
             z-index: 998;
             transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         .slider-controls.visible {
@@ -612,32 +718,23 @@
 
         /* Mobile Adjustments */
         @media (max-width: 600px) {
-            .hero h1 {
-                font-size: 20px;
-            }
-
-            .splash-screen h1 {
-                font-size: 22px;
-            }
+            .hero h1 { font-size: 20px; }
+            .splash-screen h1 { font-size: 22px; }
+            .slide-caption { font-size: 17px; }
         }
     </style>
 </head>
-
 <body class="splash-active">
 
     <!-- Welcome Splash Screen Overlay -->
     <div class="splash-screen" id="splashScreen">
-        <img src="./Majstor_MOMO.png" alt="Majstor MOMO Logo" class="splash-logo">
+        <img src="./Majstor_MOMO.png" alt="Majstor MOMO Logo" class="splash-logo" id="splashLogoImg">
         <h1 data-key="splashWelcome">Добредојдовте кај Мајстор МОМО! Откријте повеќе сега.</h1>
         <div class="splash-content-box">
-            <p style="font-size: 16px; font-weight: 500; margin-bottom: -4px;" data-key="splashOrderPrompt">Сакате да
-                нарачате?</p>
+            <p style="font-size: 16px; font-weight: 500; margin-bottom: -4px;" data-key="splashOrderPrompt">Сакате да нарачате?</p>
             <a href="tel:071267392" class="splash-btn splash-call-btn">
                 <!-- Phone Icon -->
-                <svg viewBox="0 0 24 24" style="width:20px; height:20px; fill:currentColor;">
-                    <path
-                        d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
-                </svg>
+                <svg viewBox="0 0 24 24" style="width:20px; height:20px; fill:currentColor;"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
                 <span data-key="call">+389 71 267 392</span>
             </a>
             <button class="splash-btn" onclick="dismissSplash()">
@@ -652,11 +749,17 @@
     <!-- Top Bar Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-header">
-            <img src="./Majstor_MOMO.png" alt="Majstor MOMO Logo" class="logo" onclick="handleLogoClick()">
-
+            <img src="./blacklogo.png" alt="Majstor MOMO Logo" class="logo" id="navLogoImg" onclick="handleLogoClick()">
+            
             <!-- Menu Toggle Button -->
-            <button class="menu-toggle" id="menuToggleBtn" type="button" aria-label="Toggle menu" aria-expanded="false"
-                onclick="toggleMenu(this)">
+            <button
+                class="menu-toggle"
+                id="menuToggleBtn"
+                type="button"
+                aria-label="Toggle menu"
+                aria-expanded="false"
+                onclick="toggleMenu(this)"
+            >
                 <span></span>
                 <span></span>
             </button>
@@ -666,73 +769,64 @@
             <div class="nav-item lang-container">
                 <div class="lang-toggle" onclick="toggleLang()">
                     <!-- Globe Icon -->
-                    <svg viewBox="0 0 24 24">
-                        <path
-                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
-                    </svg>
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
                     <span id="langLabel" data-key="langLabel">Јазик ▾</span>
                 </div>
                 <div class="lang-options" id="langOptions">
                     <div onclick="setLang('mk')" data-key="macedonian">Македонски</div>
                     <div onclick="setLang('en')" data-key="english">English</div>
+                    <div onclick="setLang('de')" data-key="german">Deutsch</div>
+                    <div onclick="setLang('sr')" data-key="serbian">Српски</div>
+                    <div onclick="setLang('bg')" data-key="bulgarian">Български</div>
+                    <div onclick="setLang('sq')" data-key="albanian">Shqip</div>
                 </div>
             </div>
-
+            
             <a href="tel:071267392" class="nav-item">
                 <!-- Phone Icon -->
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
-                </svg>
+                <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
                 <span data-key="call">+389 71 267 392</span>
             </a>
-
+            
             <a href="https://www.facebook.com/majstor.momo" target="_blank" class="nav-item">
                 <!-- Facebook Icon -->
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99H7.9v-2.89h2.54V9.8c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99C18.34 21.12 22 16.99 22 12z" />
-                </svg>
+                <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99H7.9v-2.89h2.54V9.8c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99C18.34 21.12 22 16.99 22 12z"/></svg>
                 <span data-key="facebook">Facebook</span>
             </a>
-
+            
             <a href="https://www.instagram.com/majstor.momo/" target="_blank" class="nav-item">
                 <!-- Instagram Icon -->
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                </svg>
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 <span data-key="instagram">Instagram</span>
             </a>
-
-            <!-- Theme Mode Controls -->
+            
+            <!-- Theme Mode Controls & Integrated Zoom Toggle Row -->
             <div class="nav-item theme-toggle-wrapper">
-                <button class="theme-btn" id="btnThemeSystem" onclick="setTheme('system')" title="System Theme">
-                    <!-- Computer Icon (Desktop) -->
-                    <svg class="icon-desktop" viewBox="0 0 24 24">
-                        <path
-                            d="M20 18c1.1 0 1.99-.9 1.99-2L22 5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 5h16v11H4V5z" />
-                    </svg>
-                    <!-- Phone Icon (Mobile) -->
-                    <svg class="icon-mobile" viewBox="0 0 24 24">
-                        <path
-                            d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z" />
-                    </svg>
-                </button>
-                <button class="theme-btn" id="btnThemeLight" onclick="setTheme('light')" title="Light Mode">
-                    <!-- Sun Icon -->
-                    <svg viewBox="0 0 24 24">
-                        <path
-                            d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z" />
-                    </svg>
-                </button>
-                <button class="theme-btn" id="btnThemeDark" onclick="setTheme('dark')" title="Dark Mode">
-                    <!-- Moon Icon -->
-                    <svg viewBox="0 0 24 24">
-                        <path
-                            d="M12.3 2c.43 0 .85.03 1.27.08-1.57.98-2.62 2.73-2.62 4.73 0 3.04 2.47 5.5 5.5 5.5 2 0 3.75-1.05 4.73-2.62.05.42.08.84.08 1.27 0 5.52-4.48 10-10 10S1.27 16.48 1.27 10.96 5.75 2 12.3 2z" />
-                    </svg>
-                </button>
+                <div class="theme-buttons-group">
+                    <button class="theme-btn" id="btnThemeSystem" onclick="setTheme('system')" title="System Theme">
+                        <!-- Computer Icon (Desktop) -->
+                        <svg class="icon-desktop" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 5h16v11H4V5z"/></svg>
+                        <!-- Phone Icon (Mobile) -->
+                        <svg class="icon-mobile" viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+                    </button>
+                    <button class="theme-btn" id="btnThemeLight" onclick="setTheme('light')" title="Light Mode">
+                        <!-- Sun Icon -->
+                        <svg viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>
+                    </button>
+                    <button class="theme-btn" id="btnThemeDark" onclick="setTheme('dark')" title="Dark Mode">
+                        <!-- Moon Icon -->
+                        <svg viewBox="0 0 24 24"><path d="M12.3 2c.43 0 .85.03 1.27.08-1.57.98-2.62 2.73-2.62 4.73 0 3.04 2.47 5.5 5.5 5.5 2 0 3.75-1.05 4.73-2.62.05.42.08.84.08 1.27 0 5.52-4.48 10-10 10S1.27 16.48 1.27 10.96 5.75 2 12.3 2z"/></svg>
+                    </button>
+                </div>
+
+                <!-- Pinch to Zoom Inline Container (Mobile Only) -->
+                <div class="zoom-inline-container">
+                    <span class="zoom-label">Pinch to zoom</span>
+                    <label class="zoom-switch">
+                        <input type="checkbox" id="zoomToggle" onchange="toggleZoom(this)">
+                        <span class="zoom-slider"></span>
+                    </label>
+                </div>
             </div>
         </div>
     </nav>
@@ -748,25 +842,22 @@
             <h1 data-key="welcome">Добредојдовте кај Мајстор МОМО! Откријте повеќе сега.</h1>
         </section>
 
+        <!-- Dynamic Subtitle / Caption Above Slideshow -->
+        <div class="slide-caption-container">
+            <div class="slide-caption active" id="slideCaption"></div>
+        </div>
+
         <!-- Slideshow Section -->
         <section class="slideshow-wrapper" id="slideshowSection">
             <div class="slides-container" id="slidesContainer">
-                <div class="slide"><img src="./748527858_122151549044990903_6627708820260192881_n.png" alt="Slide 1">
-                </div>
-                <div class="slide"><img src="./728427427_122149814618990903_459510204965844841_n.png" alt="Slide 2">
-                </div>
-                <div class="slide"><img src="./729375832_122149728146990903_7126979302070628647_n.png" alt="Slide 3">
-                </div>
-                <div class="slide"><img src="./728325646_122149553780990903_1360434851943652120_n.png" alt="Slide 4">
-                </div>
-                <div class="slide"><img src="./726645514_122149298462990903_5256951602720334585_n.png" alt="Slide 5">
-                </div>
-                <div class="slide"><img src="./726495291_122149139018990903_742751391020013363_n.png" alt="Slide 6">
-                </div>
-                <div class="slide"><img src="./724424976_122148973760990903_8986834090366905422_n.png" alt="Slide 7">
-                </div>
-                <div class="slide"><img src="./722305195_122148545264990903_7157427341935603887_n.png" alt="Slide 8">
-                </div>
+                <div class="slide"><img src="./748527858_122151549044990903_6627708820260192881_n.png" alt="Slide 1"></div>
+                <div class="slide"><img src="./728427427_122149814618990903_459510204965844841_n.png" alt="Slide 2"></div>
+                <div class="slide"><img src="./729375832_122149728146990903_7126979302070628647_n.png" alt="Slide 3"></div>
+                <div class="slide"><img src="./728325646_122149553780990903_1360434851943652120_n.png" alt="Slide 4"></div>
+                <div class="slide"><img src="./726645514_122149298462990903_5256951602720334585_n.png" alt="Slide 5"></div>
+                <div class="slide"><img src="./726495291_122149139018990903_742751391020013363_n.png" alt="Slide 6"></div>
+                <div class="slide"><img src="./724424976_122148973760990903_8986834090366905422_n.png" alt="Slide 7"></div>
+                <div class="slide"><img src="./722305195_122148545264990903_7157427341935603887_n.png" alt="Slide 8"></div>
             </div>
         </section>
 
@@ -774,28 +865,19 @@
         <section class="social-bottom">
             <a href="tel:071267392" class="call-btn">
                 <!-- Phone Icon -->
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
-                </svg>
+                <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
                 <span data-key="call">+389 71 267 392</span>
             </a>
-
+            
             <a href="https://www.facebook.com/majstor.momo" target="_blank">
                 <!-- Facebook Icon -->
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99H7.9v-2.89h2.54V9.8c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99C18.34 21.12 22 16.99 22 12z" />
-                </svg>
+                <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99H7.9v-2.89h2.54V9.8c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99C18.34 21.12 22 16.99 22 12z"/></svg>
                 <span data-key="facebook">Facebook</span>
             </a>
-
+            
             <a href="https://www.instagram.com/majstor.momo/" target="_blank">
                 <!-- Instagram Icon -->
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                </svg>
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 <span data-key="instagram">Instagram</span>
             </a>
         </section>
@@ -811,13 +893,9 @@
         <button onclick="userChangeSlide(-1)" aria-label="Previous slide">&#10094;</button>
         <button id="pausePlayBtn" onclick="togglePlayPause()" aria-label="Pause slideshow">
             <!-- Pause Icon (Default) -->
-            <svg id="pauseIcon" viewBox="0 0 24 24">
-                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-            </svg>
+            <svg id="pauseIcon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
             <!-- Play Icon (Hidden Initially) -->
-            <svg id="playIcon" viewBox="0 0 24 24" style="display:none;">
-                <path d="M8 5v14l11-7z" />
-            </svg>
+            <svg id="playIcon" viewBox="0 0 24 24" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
         </button>
         <button onclick="userChangeSlide(1)" aria-label="Next slide">&#10095;</button>
     </div>
@@ -856,7 +934,7 @@
             button.setAttribute("aria-expanded", isOpen);
 
             if (isOpen) {
-                hideTopToast(); // Automatically dismiss notification toast when hamburger menu is opened
+                hideTopToast();
                 navbar.classList.add('active');
                 backdrop.classList.add('active');
                 document.body.classList.add('menu-open');
@@ -880,38 +958,192 @@
             navbar.classList.toggle('lang-open');
         }
 
+        /* Pinch to Zoom Toggle Management */
+        function toggleZoom(checkbox) {
+            const viewportMeta = document.getElementById('viewportMeta');
+            if (checkbox.checked) {
+                // Enable zoom
+                viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
+                localStorage.setItem('majstor_momo_zoom', 'enabled');
+            } else {
+                // Disable zoom (default)
+                viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=no');
+                localStorage.setItem('majstor_momo_zoom', 'disabled');
+            }
+        }
+
         /* Dynamic Calendar Year Generator */
         const year = new Date().getFullYear();
 
         /* Translations System */
         const translations = {
-            en: {
-                splashWelcome: "Welcome to Majstor MOMO! Discover more now.",
-                splashOrderPrompt: "Would you like to order?",
-                visitWebsite: "Visit Website",
-                langLabel: "Language ▾",
-                english: "English",
-                macedonian: "Macedonian",
-                welcome: "Welcome to Majstor MOMO! Discover more now.",
-                call: "+389 71 267 392",
-                facebook: "Facebook",
-                instagram: "Instagram",
-                alreadyOnTopMsg: "You're already on top",
-                footerText: `©${year} Majstor MOMO Pehcevo | Made with love by MilanovvDEV`
-            },
             mk: {
                 splashWelcome: "Добредојдовте кај Мајстор МОМО! Откријте повеќе сега.",
                 splashOrderPrompt: "Сакате да нарачате?",
                 visitWebsite: "Посетете ја веб страната",
                 langLabel: "Јазик ▾",
                 english: "Англиски",
+                german: "Германски",
                 macedonian: "Македонски",
+                serbian: "Српски",
+                bulgarian: "Български",
+                albanian: "Shqip",
                 welcome: "Добредојдовте кај Мајстор МОМО! Откријте повеќе сега.",
                 call: "+389 71 267 392",
                 facebook: "Facebook",
                 instagram: "Instagram",
                 alreadyOnTopMsg: "Веќе сте на врвот",
-                footerText: `©${year} Мајстор МОМО Пехчево | Изработено со љубов од MilanovvDEV`
+                footerText: `©${year} Мајстор МОМО Пехчево | Изработено со љубов од MilanovvDEV`,
+                captions: [
+                    "Прецизност во секој милиметар.",
+                    "Игра со карактер.\nИзработка со душа.",
+                    "Круг што привлекува погледи.",
+                    "Епоксидна смола.\nДизајн што остава впечаток.",
+                    "Кревет од масивно дрво.",
+                    "Маса со карактер и стил.",
+                    "Даски за сервирање\nСо епоксидна смола",
+                    "Трпезариска маса\nСо карактер и стабилност."
+                ]
+            },
+            en: {
+                splashWelcome: "Welcome to Majstor MOMO! Discover more now.",
+                splashOrderPrompt: "Would you like to order?",
+                visitWebsite: "Visit Website",
+                langLabel: "Language ▾",
+                english: "English",
+                german: "German",
+                macedonian: "Macedonian",
+                serbian: "Serbian",
+                bulgarian: "Bulgarian",
+                albanian: "Albanian",
+                welcome: "Welcome to Majstor MOMO! Discover more now.",
+                call: "+389 71 267 392",
+                facebook: "Facebook",
+                instagram: "Instagram",
+                alreadyOnTopMsg: "You're already on top",
+                footerText: `©${year} Majstor MOMO Pehcevo | Made with love by MilanovvDEV`,
+                captions: [
+                    "Precision in every millimeter.",
+                    "A game of character.\nCrafted with soul.",
+                    "A circle that draws attention.",
+                    "Epoxy resin.\nDesign that leaves an impression.",
+                    "Solid wood bed.",
+                    "Table with character and style.",
+                    "Serving boards\nWith epoxy resin",
+                    "Dining table\nWith character and stability."
+                ]
+            },
+            de: {
+                splashWelcome: "Willkommen bei Majstor MOMO! Entdecken Sie jetzt mehr.",
+                splashOrderPrompt: "Möchten Sie bestellen?",
+                visitWebsite: "Website besuchen",
+                langLabel: "Sprache ▾",
+                english: "Englisch",
+                german: "Deutsch",
+                macedonian: "Mazedonisch",
+                serbian: "Serbisch",
+                bulgarian: "Bulgarisch",
+                albanian: "Albanisch",
+                welcome: "Willkommen bei Majstor MOMO! Entdecken Sie jetzt mehr.",
+                call: "+389 71 267 392",
+                facebook: "Facebook",
+                instagram: "Instagram",
+                alreadyOnTopMsg: "Sie sind bereits ganz oben",
+                footerText: `©${year} Majstor MOMO Pehcevo | Mit Liebe gemacht von MilanovvDEV`,
+                captions: [
+                    "Präzision in jedem Millimeter.",
+                    "Ein Spiel mit Charakter.\nMit Seele gefertigt.",
+                    "Ein Kreis, der Blicke auf sich zieht.",
+                    "Epoxidharz.\nDesign, das Eindruck hinterlässt.",
+                    "Bett aus Massivholz.",
+                    "Tisch mit Charakter und Stil.",
+                    "Servierbretter\nMit Epoxidharz",
+                    "Esstisch\nMit Charakter und Stabilität."
+                ]
+            },
+            sr: {
+                splashWelcome: "Добродошли код Мајстор МОМО! Откријте више сада.",
+                splashOrderPrompt: "Желите ли да наручите?",
+                visitWebsite: "Посетите веб сајт",
+                langLabel: "Језик ▾",
+                english: "Енглески",
+                german: "Немачки",
+                macedonian: "Македонски",
+                serbian: "Српски",
+                bulgarian: "Бугарски",
+                albanian: "Албански",
+                welcome: "Добродошли код Мајстор МОМО! Откријте више сада.",
+                call: "+389 71 267 392",
+                facebook: "Facebook",
+                instagram: "Instagram",
+                alreadyOnTopMsg: "Већ сте на врху",
+                footerText: `©${year} Мајстор МОМО Пехчево | Израђено са љубављу од MilanovvDEV`,
+                captions: [
+                    "Прецизност у сваком милиметру.",
+                    "Игра са карактером.\nИзрада са душом.",
+                    "Круг који привлачи погледе.",
+                    "Епоксидна смола.\nДизајн који оставља утисак.",
+                    "Кревет од масивног дрвета.",
+                    "Сто са карактером и стилом.",
+                    "Даске за сервирање\nСа епоксидном смолом",
+                    "Трпезаријски сто\nСа карактером и стабилношћу."
+                ]
+            },
+            bg: {
+                splashWelcome: "Добре дошли при Майстор МОМО! Открийте повече сега.",
+                splashOrderPrompt: "Искате ли да поръчате?",
+                visitWebsite: "Посетете уебсайта",
+                langLabel: "Език ▾",
+                english: "Английски",
+                german: "Немски",
+                macedonian: "Македонски",
+                serbian: "Сръбски",
+                bulgarian: "Български",
+                albanian: "Албански",
+                welcome: "Добре дошли при Майстор МОМО! Открийте повече сега.",
+                call: "+389 71 267 392",
+                facebook: "Facebook",
+                instagram: "Instagram",
+                alreadyOnTopMsg: "Вече сте на върха",
+                footerText: `©${year} Майстор МОМО Пехчево | Създадено с любов от MilanovvDEV`,
+                captions: [
+                    "Превъзходство във всеки милиметър.",
+                    "Игра с характер.\nИзработка с душа.",
+                    "Кръг, който привлича погледите.",
+                    "Епоксидна смола.\nДизайн, който оставя впечатление.",
+                    "Легло от масивно дърво.",
+                    "Маса с характер и стил.",
+                    "Дъски за сервиране\nС епоксидна смола",
+                    "Трапезна маса\nС характер и стабилност."
+                ]
+            },
+            sq: {
+                splashWelcome: "Mirë se erdhët te Master MOMO! Zbuloni më shumë tani.",
+                splashOrderPrompt: "Dëshironi të porosisni?",
+                visitWebsite: "Vizitoni faqen e internetit",
+                langLabel: "Gjuha ▾",
+                english: "Anglisht",
+                german: "Gjermanisht",
+                macedonian: "Maqedonisht",
+                serbian: "Serbisht",
+                bulgarian: "Bullgarisht",
+                albanian: "Shqip",
+                welcome: "Mirë se erdhët te Master MOMO! Zbuloni më shumë tani.",
+                call: "+389 71 267 392",
+                facebook: "Facebook",
+                instagram: "Instagram",
+                alreadyOnTopMsg: "Jeni tashmë në krye",
+                footerText: `©${year} Master MOMO Pehçevo | Krijuar me dashuri nga MilanovvDEV`,
+                captions: [
+                    "Saktësi në çdo milimetër.",
+                    "Një lojë karakteri.\nPunuar me shpirt.",
+                    "Një rreth që tërheq vëmendjen.",
+                    "Rrëshqirë epoksi.\nDizajn që lënë mbresë.",
+                    "Krevat prej druri masiv.",
+                    "Tryezë me karakter dhe stil.",
+                    "Dërrasa servisi\nMe rrëshqirë epoksi",
+                    "Tryezë ngrënie\nMe karakter dhe qëndrueshmëri."
+                ]
             }
         };
 
@@ -923,9 +1155,11 @@
                     el.innerText = translations[lang][key];
                 }
             });
+            updateCaptionText(currentSlide, 'none');
+
             langOptions.classList.remove('active');
             navbar.classList.remove('lang-open');
-
+            
             if (navbar.classList.contains('active')) {
                 closeMenu();
             }
@@ -957,11 +1191,24 @@
 
             const savedTheme = localStorage.getItem('majstor_momo_theme') || 'system';
             setTheme(savedTheme);
+
+            const savedZoom = localStorage.getItem('majstor_momo_zoom') || 'disabled';
+            const zoomToggle = document.getElementById('zoomToggle');
+            if (savedZoom === 'enabled') {
+                zoomToggle.checked = true;
+                document.getElementById('viewportMeta').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
+            } else {
+                zoomToggle.checked = false;
+                document.getElementById('viewportMeta').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=no');
+            }
+
+            updateCaptionText(0, 'none');
         });
 
-        /* Slideshow Logic */
+        /* Slideshow & Dynamic Caption Logic */
         let currentSlide = 0;
         const slidesContainer = document.getElementById('slidesContainer');
+        const slideCaption = document.getElementById('slideCaption');
         const totalSlides = document.querySelectorAll('.slide').length;
         let autoScrollTimer = null;
         let isPaused = false;
@@ -970,16 +1217,58 @@
             slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
         }
 
+        function updateCaptionText(index, direction) {
+            const currentLang = localStorage.getItem('majstor_momo_lang') || 'mk';
+            const captionsList = translations[currentLang] ? translations[currentLang].captions : translations['mk'].captions;
+            const newText = captionsList[index] || '';
+
+            if (direction === 'none') {
+                slideCaption.innerText = newText;
+                slideCaption.className = "slide-caption active";
+                return;
+            }
+
+            /* 
+               Text Direction Animation Logic:
+               - direction === 'right' (moving forward / next): 
+                 Current text fades out towards the left (fade-out-left).
+                 Incoming new text enters from the right (fade-in-right).
+               - direction === 'left' (moving backward / previous): 
+                 Current text fades out towards the right (fade-out-right).
+                 Incoming new text enters from the left (fade-in-left).
+            */
+            if (direction === 'right') {
+                slideCaption.className = "slide-caption fade-out-left";
+            } else {
+                slideCaption.className = "slide-caption fade-out-right";
+            }
+
+            setTimeout(() => {
+                slideCaption.innerText = newText;
+                if (direction === 'right') {
+                    slideCaption.className = "slide-caption fade-in-right";
+                } else {
+                    slideCaption.className = "slide-caption fade-in-left";
+                }
+                
+                void slideCaption.offsetWidth;
+                slideCaption.className = "slide-caption active";
+            }, 200);
+        }
+
         function changeSlide(direction) {
             currentSlide += direction;
-
+            
             if (currentSlide < 0) {
                 currentSlide = totalSlides - 1;
             } else if (currentSlide >= totalSlides) {
                 currentSlide = 0;
             }
-
+            
             updateSlidePosition();
+            
+            const animDir = direction > 0 ? 'right' : 'left';
+            updateCaptionText(currentSlide, animDir);
         }
 
         function startAutoScroll() {
@@ -1032,7 +1321,7 @@
 
         startAutoScroll();
 
-        /* Logo Click Handler with Smooth Non-Bouncing Toast */
+        /* Logo Click Handler with Toast & Slideshow Resume */
         function showTopToast() {
             if (toastTimeout) {
                 clearTimeout(toastTimeout);
@@ -1048,11 +1337,10 @@
                 closeMenu();
             }
 
-            // If already at the top, show notification toast instead of reloading
             if (window.scrollY === 0) {
                 showTopToast();
+                startAutoScroll();
             } else {
-                // If scrolled down, scroll to top, reset slide to 1st image, and resume auto-scroll
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
@@ -1060,6 +1348,7 @@
 
                 currentSlide = 0;
                 updateSlidePosition();
+                updateCaptionText(0, 'left');
                 startAutoScroll();
             }
         }
@@ -1120,5 +1409,4 @@
         footerObserver.observe(footer);
     </script>
 </body>
-
 </html>
