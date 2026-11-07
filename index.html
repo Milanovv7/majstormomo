@@ -2,7 +2,7 @@
 <html lang="mk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" id="viewportMeta">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" id="viewportMeta">
     <title>Majstor MOMO</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="./Majstor_MOMO.png">
@@ -62,7 +62,7 @@
             color: var(--text-color);
             overflow-x: hidden;
             transition: background-color 0.3s, color 0.3s;
-            touch-action: pan-x pan-y;
+            touch-action: pan-x pan-y pinch-zoom;
         }
 
         body.splash-active {
@@ -205,7 +205,7 @@
             z-index: 1000;
             overflow: hidden;
             transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            touch-action: pan-x pan-y;
+            touch-action: pan-x pan-y pinch-zoom;
         }
 
         .navbar.pulling {
@@ -571,7 +571,7 @@
             overflow: hidden;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            touch-action: pan-y;
+            touch-action: pan-y pinch-zoom;
         }
 
         /* Dynamic Slideshow Caption / Subtitle Wrapper */
@@ -1064,46 +1064,17 @@
         navbar.addEventListener('touchend', endPullGesture, { passive: true });
         navbar.addEventListener('touchcancel', endPullGesture, { passive: true });
 
-        /* Pinch to Zoom Toggle Management (Hard-blocking double-tap & gesture zoom) */
+        /* Pinch to Zoom Toggle Management */
         function toggleZoom(checkbox) {
             const viewportMeta = document.getElementById('viewportMeta');
             if (checkbox.checked) {
-                // Enable zoom
                 viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
                 localStorage.setItem('majstor_momo_zoom', 'enabled');
             } else {
-                // Completely block zoom
-                viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+                viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
                 localStorage.setItem('majstor_momo_zoom', 'disabled');
             }
         }
-
-        // Prevent pinch-to-zoom and multi-touch gestures via touchstart/gesturestart listeners when disabled
-        document.addEventListener('gesturestart', function(e) {
-            const zoomToggle = document.getElementById('zoomToggle');
-            if (!zoomToggle.checked) {
-                e.preventDefault();
-            }
-        });
-
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(e) {
-            const zoomToggle = document.getElementById('zoomToggle');
-            if (!zoomToggle.checked) {
-                const now = Date.now();
-                if (now - lastTouchEnd <= 300) {
-                    e.preventDefault();
-                }
-                lastTouchEnd = now;
-            }
-        }, { passive: false });
-
-        document.addEventListener('touchmove', function(e) {
-            const zoomToggle = document.getElementById('zoomToggle');
-            if (!zoomToggle.checked && e.touches.length > 1) {
-                e.preventDefault();
-            }
-        }, { passive: false });
 
         /* Dynamic Calendar Year Generator */
         const year = new Date().getFullYear();
@@ -1325,15 +1296,10 @@
             const savedTheme = localStorage.getItem('majstor_momo_theme') || 'system';
             setTheme(savedTheme);
 
-            const savedZoom = localStorage.getItem('majstor_momo_zoom') || 'disabled';
+            const savedZoom = localStorage.getItem('majstor_momo_zoom') || 'enabled';
             const zoomToggle = document.getElementById('zoomToggle');
-            if (savedZoom === 'enabled') {
-                zoomToggle.checked = true;
-                document.getElementById('viewportMeta').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
-            } else {
-                zoomToggle.checked = false;
-                document.getElementById('viewportMeta').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
-            }
+            zoomToggle.checked = (savedZoom === 'enabled');
+            document.getElementById('viewportMeta').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
 
             updateCaptionText(0, 'none');
         });
