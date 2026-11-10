@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" id="viewportMeta">
     <title>Majstor MOMO</title>
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="./Majstor_MOMO.png">
+    <link rel="icon" type="image/png" href="./favicon.png">
     <style>
         /* CSS Variables for Light / Dark / System Theme */
         :root {
@@ -13,9 +13,7 @@
             --text-color: #1a1a1a;
             --glass-bg: rgba(255, 255, 255, 0.65);
             --border-color: rgba(0, 0, 0, 0.08);
-            --logo-src: url('./blacklogo.png');
-            --toggle-active-bg: #1a1a1a;
-            --checkmark-color: #000000;
+            --toggle-active-bg: #8B5A2B;
         }
 
         body.dark-theme {
@@ -23,9 +21,7 @@
             --text-color: #ffffff;
             --glass-bg: rgba(18, 18, 18, 0.65);
             --border-color: rgba(255, 255, 255, 0.08);
-            --logo-src: url('./whitelogo.png');
-            --toggle-active-bg: #ffffff;
-            --checkmark-color: #ffffff;
+            --toggle-active-bg: #8B5A2B;
         }
 
         body.light-theme {
@@ -33,9 +29,7 @@
             --text-color: #1a1a1a;
             --glass-bg: rgba(255, 255, 255, 0.65);
             --border-color: rgba(0, 0, 0, 0.08);
-            --logo-src: url('./blacklogo.png');
-            --toggle-active-bg: #1a1a1a;
-            --checkmark-color: #000000;
+            --toggle-active-bg: #8B5A2B;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -44,9 +38,7 @@
                 --text-color: #ffffff;
                 --glass-bg: rgba(18, 18, 18, 0.65);
                 --border-color: rgba(255, 255, 255, 0.08);
-                --logo-src: url('./whitelogo.png');
-                --toggle-active-bg: #ffffff;
-                --checkmark-color: #ffffff;
+                --toggle-active-bg: #8B5A2B;
             }
         }
 
@@ -201,7 +193,7 @@
             left: 0;
             width: 100%;
             height: auto;
-            max-height: 70px;
+            max-height: 75px;
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
@@ -217,15 +209,15 @@
         }
 
         .navbar.active {
-            max-height: 620px;
+            max-height: 630px;
         }
 
         .navbar.active.lang-open {
-            max-height: 780px;
+            max-height: 790px;
         }
 
         .nav-header {
-            height: 70px;
+            height: 75px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -234,12 +226,11 @@
         }
 
         .logo {
-            height: 32px;
+            height: 54px;
             width: auto;
             object-fit: contain;
             cursor: pointer;
             user-select: none;
-            content: var(--logo-src);
         }
 
         /* Top Notification Toast */
@@ -263,7 +254,7 @@
         }
 
         .top-toast.show {
-            top: 70px;
+            top: 75px;
         }
 
         /* 2-Line Menu Toggle Styling */
@@ -479,7 +470,7 @@
             white-space: nowrap;
         }
 
-        /* Custom Switch Toggle with Perfectly Centered Checkmark */
+        /* Custom Switch Toggle with Brown Active Background and No Checkmark */
         .splash-switch {
             position: relative;
             display: inline-block;
@@ -514,9 +505,6 @@
             transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             border-radius: 50%;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .splash-switch input:checked + .splash-slider {
@@ -525,17 +513,6 @@
 
         .splash-switch input:checked + .splash-slider:before {
             transform: translateX(24px);
-            content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="11" height="11"><path d="M9 16.2l-3.5-3.5L4 14.2l5 5 12-12-1.4-1.4z" fill="%231a1a1a"/></svg>');
-        }
-
-        body.dark-theme .splash-switch input:checked + .splash-slider:before {
-            content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="11" height="11"><path d="M9 16.2l-3.5-3.5L4 14.2l5 5 12-12-1.4-1.4z" fill="%23ffffff"/></svg>');
-        }
-
-        @media (prefers-color-scheme: dark) {
-            body:not(.light-theme):not(.dark-theme) .splash-switch input:checked + .splash-slider:before {
-                content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="11" height="11"><path d="M9 16.2l-3.5-3.5L4 14.2l5 5 12-12-1.4-1.4z" fill="%23ffffff"/></svg>');
-            }
         }
 
         .icon-desktop {
@@ -556,7 +533,7 @@
 
         /* Hero Section */
         .hero {
-            margin-top: 70px;
+            margin-top: 75px;
             padding: 40px 20px 70px 20px;
             text-align: center;
         }
@@ -764,7 +741,7 @@
 
     <!-- Welcome Splash Screen Overlay -->
     <div class="splash-screen" id="splashScreen">
-        <img src="./Majstor_MOMO.png" alt="Majstor MOMO Logo" class="splash-logo" id="splashLogoImg">
+        <img src="./favicon.png" alt="Majstor MOMO Logo" class="splash-logo" id="splashLogoImg">
         <h1 data-key="splashWelcome">Добредојдовте кај Мајстор МОМО! Откријте повеќе сега.</h1>
         <div class="splash-content-box">
             <p style="font-size: 16px; font-weight: 500; margin-bottom: -4px;" data-key="splashOrderPrompt">Сакате да нарачате?</p>
@@ -785,7 +762,7 @@
     <!-- Top Bar Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-header">
-            <img src="./blacklogo.png" alt="Majstor MOMO Logo" class="logo" id="navLogoImg" onclick="handleLogoClick()">
+            <img src="./favicon.png" alt="Majstor MOMO Logo" class="logo" id="navLogoImg" onclick="handleLogoClick()">
             
             <!-- Menu Toggle Button -->
             <button
@@ -1039,7 +1016,7 @@
                     window.addEventListener('touchmove', preventScrollRefresh, { passive: false });
                 }
 
-                const newHeight = Math.min(70 + deltaY, 620);
+                const newHeight = Math.min(75 + deltaY, 630);
                 navbar.classList.add('pulling');
                 navbar.style.maxHeight = `${newHeight}px`;
 
