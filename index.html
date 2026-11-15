@@ -11,34 +11,34 @@
         :root {
             --bg-color: #ffffff;
             --text-color: #1a1a1a;
-            --glass-bg: rgba(255, 255, 255, 0.65);
-            --border-color: rgba(0, 0, 0, 0.08);
-            --toggle-active-bg: #8B5A2B;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --toggle-active-bg: #1a1a1a; /* Black when enabled in light mode */
+            --slider-knob-bg: #ffffff; /* White in light mode */
         }
 
         body.dark-theme {
             --bg-color: #121212;
             --text-color: #ffffff;
-            --glass-bg: rgba(18, 18, 18, 0.65);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --toggle-active-bg: #8B5A2B;
+            --glass-bg: rgba(18, 18, 18, 0.75);
+            --toggle-active-bg: #ffffff; /* White when enabled in dark mode */
+            --slider-knob-bg: #121212; /* Black in dark mode */
         }
 
         body.light-theme {
             --bg-color: #ffffff;
             --text-color: #1a1a1a;
-            --glass-bg: rgba(255, 255, 255, 0.65);
-            --border-color: rgba(0, 0, 0, 0.08);
-            --toggle-active-bg: #8B5A2B;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --toggle-active-bg: #1a1a1a; /* Black when enabled in light mode */
+            --slider-knob-bg: #ffffff; /* White in light mode */
         }
 
         @media (prefers-color-scheme: dark) {
             body:not(.light-theme):not(.dark-theme) {
                 --bg-color: #121212;
                 --text-color: #ffffff;
-                --glass-bg: rgba(18, 18, 18, 0.65);
-                --border-color: rgba(255, 255, 255, 0.08);
-                --toggle-active-bg: #8B5A2B;
+                --glass-bg: rgba(18, 18, 18, 0.75);
+                --toggle-active-bg: #ffffff; /* White when enabled in dark mode */
+                --slider-knob-bg: #121212; /* Black in dark mode */
             }
         }
 
@@ -47,6 +47,7 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent; /* Removes touch highlight on mobile */
         }
 
         html {
@@ -186,21 +187,21 @@
             margin-bottom: 10px;
         }
 
-        /* Top Bar Container */
+        /* Top Bar Container - Apple style 44px thin header without bottom border */
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: auto;
-            max-height: 75px;
+            height: 44px;
+            max-height: 44px;
             background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: none; /* Border line removed for a cleaner look */
             z-index: 1000;
             overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1), max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             touch-action: pan-x pan-y pinch-zoom;
         }
 
@@ -209,28 +210,56 @@
         }
 
         .navbar.active {
-            max-height: 630px;
+            height: 100vh;
+            height: 100dvh;
+            max-height: 100dvh;
         }
 
         .navbar.active.lang-open {
-            max-height: 790px;
+            height: 100vh;
+            height: 100dvh;
+            max-height: 100dvh;
         }
 
         .nav-header {
-            height: 75px;
+            height: 44px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
+            padding: 0 4px 0 14px; /* Left padding 14px shifts logo ~10px more left; right padding 4px shifts hamburger button ~10px more right */
             width: 100%;
         }
 
+        /* Top Bar Logo Sizing */
         .logo {
-            height: 54px;
+            height: 18px;
             width: auto;
             object-fit: contain;
             cursor: pointer;
             user-select: none;
+        }
+
+        .logo-dark {
+            display: none;
+        }
+        .logo-light {
+            display: block;
+        }
+
+        body.dark-theme .logo-light {
+            display: none;
+        }
+        body.dark-theme .logo-dark {
+            display: block;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body:not(.light-theme):not(.dark-theme) .logo-light {
+                display: none;
+            }
+            body:not(.light-theme):not(.dark-theme) .logo-dark {
+                display: block;
+            }
         }
 
         /* Top Notification Toast */
@@ -254,46 +283,52 @@
         }
 
         .top-toast.show {
-            top: 75px;
+            top: 44px;
         }
 
-        /* 2-Line Menu Toggle Styling */
-        .menu-toggle {
-            width: 42px;
-            height: 36px;
-            display: inline-flex;
-            flex-direction: column;
-            justify-content: center;
+        /* Menu Button Animation & Styling */
+        .menu-button {
+            width: 44px;
+            height: 44px;
+            position: relative;
+            display: flex;
             align-items: center;
-            gap: 9px;
-            background: transparent;
+            justify-content: center;
             border: none;
+            background: transparent;
             cursor: pointer;
-            padding: 0;
+            -webkit-tap-highlight-color: transparent;
             z-index: 1001;
         }
 
-        .menu-toggle span {
-            display: block;
-            width: 32px;
-            height: 2px;
+        .menu-button span {
+            position: absolute;
+            width: 18px;
+            height: 1.5px;
             background: var(--text-color);
             border-radius: 2px;
-            transition: transform 0.35s ease, width 0.35s ease;
-            transform-origin: center;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .menu-toggle.active span:first-child {
-            transform: translateY(5.5px) rotate(45deg);
+        .menu-button span:first-child {
+            transform: translateY(-3.5px);
         }
 
-        .menu-toggle.active span:last-child {
-            transform: translateY(-5.5px) rotate(-45deg);
+        .menu-button span:last-child {
+            transform: translateY(3.5px);
         }
 
-        .menu-toggle:focus-visible {
+        .menu-button.active span:first-child {
+            transform: rotate(45deg);
+        }
+
+        .menu-button.active span:last-child {
+            transform: rotate(-45deg);
+        }
+
+        .menu-button:focus-visible {
             outline: 2px solid var(--text-color);
-            outline-offset: 5px;
+            outline-offset: 2px;
             border-radius: 4px;
         }
 
@@ -318,33 +353,35 @@
             pointer-events: auto;
         }
 
-        /* Inner Menu Content */
+        /* Inner Menu Content - Full Screen Extension */
         .nav-content {
-            padding: 10px 25px 30px 25px;
+            padding: 10px 30px 40px 30px;
             display: flex;
             flex-direction: column;
             gap: 4px;
+            height: calc(100dvh - 44px);
+            overflow-y: auto;
         }
 
         .nav-item {
             color: var(--text-color);
             text-decoration: none;
-            font-size: 18px;
+            font-size: 21px;
             font-weight: 500;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(128, 128, 128, 0.2);
             cursor: pointer;
             opacity: 0;
             transform: translateY(-10px);
             transition: opacity 0.3s ease, transform 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
         }
 
         .nav-item svg {
-            width: 22px;
-            height: 22px;
+            width: 25px;
+            height: 25px;
             fill: currentColor;
             flex-shrink: 0;
         }
@@ -375,7 +412,7 @@
         .lang-toggle {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
             width: 100%;
         }
 
@@ -387,33 +424,33 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            padding-left: 36px;
+            padding-left: 41px;
             gap: 6px;
             transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, margin-top 0.3s ease;
             margin-top: 0;
         }
 
         .lang-options.active {
-            max-height: 280px;
+            max-height: 300px;
             opacity: 1;
             margin-top: 10px;
             overflow-y: auto;
         }
 
         .lang-options div {
-            padding: 8px 12px;
+            padding: 10px 14px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 19px;
             color: var(--text-color);
             border-radius: 6px;
             transition: background-color 0.2s;
         }
 
         .lang-options div:hover {
-            background-color: var(--border-color);
+            background-color: rgba(128, 128, 128, 0.15);
         }
 
-        /* Theme Toggle Controls & Integrated Splash Setting Row */
+        /* Theme Toggle Controls & Integrated Splash Screen Setting Row */
         .theme-toggle-wrapper {
             display: flex;
             align-items: center;
@@ -432,7 +469,7 @@
 
         .theme-btn {
             background: none;
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(128, 128, 128, 0.3);
             border-radius: 50%;
             width: 42px;
             height: 42px;
@@ -470,7 +507,7 @@
             white-space: nowrap;
         }
 
-        /* Custom Switch Toggle with Brown Active Background and No Checkmark */
+        /* Custom Switch Toggle */
         .splash-switch {
             position: relative;
             display: inline-block;
@@ -489,7 +526,7 @@
             position: absolute;
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: var(--border-color);
+            background-color: rgba(128, 128, 128, 0.3);
             transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             border-radius: 24px;
         }
@@ -501,14 +538,14 @@
             width: 18px;
             left: 3px;
             bottom: 3px;
-            background-color: var(--bg-color);
+            background-color: var(--slider-knob-bg); /* White in light mode, Black in dark mode */
             transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             border-radius: 50%;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .splash-switch input:checked + .splash-slider {
-            background-color: var(--toggle-active-bg);
+            background-color: var(--toggle-active-bg); /* Black when enabled in light mode, White when enabled in dark mode */
         }
 
         .splash-switch input:checked + .splash-slider:before {
@@ -531,10 +568,10 @@
             }
         }
 
-        /* Hero Section */
+        /* Hero Section - Matching top space with left padding (14px) */
         .hero {
-            margin-top: 75px;
-            padding: 40px 20px 70px 20px;
+            margin-top: 44px;
+            padding: 24px 24px 70px 24px;
             text-align: center;
         }
 
@@ -640,7 +677,7 @@
             background: var(--glass-bg);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(128, 128, 128, 0.2);
             padding: 10px 20px;
             border-radius: 30px;
             display: flex;
@@ -759,17 +796,19 @@
     <!-- Top Notification Toast -->
     <div class="top-toast" id="topToast" data-key="alreadyOnTopMsg">Веќе сте на врвот</div>
 
-    <!-- Top Bar Navigation -->
+    <!-- Top Bar Navigation (Thin Apple Style) -->
     <nav class="navbar" id="navbar">
         <div class="nav-header">
-            <img src="./favicon.png" alt="Majstor MOMO Logo" class="logo" id="navLogoImg" onclick="handleLogoClick()">
+            <!-- Top Bar Logos: shifted ~10px more left -->
+            <img src="./blacklogo.png" alt="Majstor MOMO Logo" class="logo logo-light" id="navLogoLight" onclick="handleLogoClick()">
+            <img src="./whitelogo.png" alt="Majstor MOMO Logo" class="logo logo-dark" id="navLogoDark" onclick="handleLogoClick()">
             
-            <!-- Menu Toggle Button -->
+            <!-- Menu Toggle Button: shifted ~10px more right -->
             <button
-                class="menu-toggle"
+                class="menu-button"
                 id="menuToggleBtn"
                 type="button"
-                aria-label="Toggle menu"
+                aria-label="Open menu"
                 aria-expanded="false"
                 onclick="toggleMenu(this)"
             >
@@ -957,6 +996,7 @@
             const isOpen = button.classList.contains("active");
 
             button.setAttribute("aria-expanded", isOpen);
+            button.setAttribute("aria-label", isOpen ? 'Close menu' : 'Open menu');
 
             if (isOpen) {
                 hideTopToast();
@@ -971,10 +1011,12 @@
         function closeMenu() {
             menuToggleBtn.classList.remove("active");
             menuToggleBtn.setAttribute("aria-expanded", "false");
+            menuToggleBtn.setAttribute("aria-label", "Open menu");
             navbar.classList.remove('active');
             navbar.classList.remove('lang-open');
             navbar.classList.remove('items-visible');
             navbar.style.maxHeight = '';
+            navbar.style.height = '';
             langOptions.classList.remove('active');
             backdrop.classList.remove('active');
             document.body.classList.remove('menu-open');
@@ -1016,9 +1058,10 @@
                     window.addEventListener('touchmove', preventScrollRefresh, { passive: false });
                 }
 
-                const newHeight = Math.min(75 + deltaY, 630);
+                const newHeight = Math.min(44 + deltaY, window.innerHeight);
                 navbar.classList.add('pulling');
                 navbar.style.maxHeight = `${newHeight}px`;
+                navbar.style.height = `${newHeight}px`;
 
                 // Progressively fade backdrop while pulling
                 const progress = Math.min(deltaY / 250, 1);
@@ -1044,18 +1087,21 @@
             const pulledDistance = endY - pullStartY;
 
             if (pulledDistance > 60) {
-                // Expand completely and reveal options
+                // Expand completely to full screen
                 menuToggleBtn.classList.add("active");
                 menuToggleBtn.setAttribute("aria-expanded", "true");
+                menuToggleBtn.setAttribute("aria-label", "Close menu");
                 hideTopToast();
                 navbar.classList.add('active');
                 navbar.classList.add('items-visible');
                 navbar.style.maxHeight = '';
+                navbar.style.height = '';
                 backdrop.classList.add('active');
                 document.body.classList.add('menu-open');
             } else {
                 // Revert pulling effect
                 navbar.style.maxHeight = '';
+                navbar.style.height = '';
                 backdrop.classList.remove('active');
             }
         };
@@ -1472,6 +1518,8 @@
 
         let isSlideshowInView = false;
         let isFooterInView = false;
+
+        let lastScrollY = window.scrollY;
 
         function updateControlsVisibility() {
             if (isSlideshowInView && !isFooterInView) {
