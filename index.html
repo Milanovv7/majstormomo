@@ -12,24 +12,27 @@
             --bg-color: #ffffff;
             --text-color: #1a1a1a;
             --glass-bg: rgba(255, 255, 255, 0.75);
-            --toggle-active-bg: #1a1a1a; /* Black when enabled in light mode */
-            --slider-knob-bg: #ffffff; /* White in light mode */
+            --border-color: rgba(0, 0, 0, 0.08);
+            --toggle-active-bg: #1a1a1a;
+            --slider-knob-bg: #ffffff;
         }
 
         body.dark-theme {
             --bg-color: #121212;
             --text-color: #ffffff;
             --glass-bg: rgba(18, 18, 18, 0.75);
-            --toggle-active-bg: #ffffff; /* White when enabled in dark mode */
-            --slider-knob-bg: #121212; /* Black in dark mode */
+            --border-color: rgba(255, 255, 255, 0.08);
+            --toggle-active-bg: #ffffff;
+            --slider-knob-bg: #121212;
         }
 
         body.light-theme {
             --bg-color: #ffffff;
             --text-color: #1a1a1a;
             --glass-bg: rgba(255, 255, 255, 0.75);
-            --toggle-active-bg: #1a1a1a; /* Black when enabled in light mode */
-            --slider-knob-bg: #ffffff; /* White in light mode */
+            --border-color: rgba(0, 0, 0, 0.08);
+            --toggle-active-bg: #1a1a1a;
+            --slider-knob-bg: #ffffff;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -37,8 +40,9 @@
                 --bg-color: #121212;
                 --text-color: #ffffff;
                 --glass-bg: rgba(18, 18, 18, 0.75);
-                --toggle-active-bg: #ffffff; /* White when enabled in dark mode */
-                --slider-knob-bg: #121212; /* Black in dark mode */
+                --border-color: rgba(255, 255, 255, 0.08);
+                --toggle-active-bg: #ffffff;
+                --slider-knob-bg: #121212;
             }
         }
 
@@ -47,7 +51,7 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent; /* Removes touch highlight on mobile */
+            -webkit-tap-highlight-color: transparent;
         }
 
         html {
@@ -187,21 +191,21 @@
             margin-bottom: 10px;
         }
 
-        /* Top Bar Container - Apple style 44px thin header without bottom border */
+        /* Top Bar Container - 48px thickness */
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 44px;
-            max-height: 44px;
+            height: 48px;
+            max-height: 48px;
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: none; /* Border line removed for a cleaner look */
+            border-bottom: none;
             z-index: 1000;
             overflow: hidden;
-            transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1), max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1), max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
             touch-action: pan-x pan-y pinch-zoom;
         }
 
@@ -209,10 +213,14 @@
             transition: none !important;
         }
 
+        /* Solid background with no transparency blur when open */
         .navbar.active {
             height: 100vh;
             height: 100dvh;
             max-height: 100dvh;
+            background: var(--bg-color);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
         }
 
         .navbar.active.lang-open {
@@ -222,21 +230,28 @@
         }
 
         .nav-header {
-            height: 44px;
+            height: 48px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 4px 0 14px; /* Left padding 14px shifts logo ~10px more left; right padding 4px shifts hamburger button ~10px more right */
+            padding: 0 4px 0 14px;
             width: 100%;
         }
 
-        /* Top Bar Logo Sizing */
+        /* Top Bar Logo Sizing & Fade Animation */
         .logo {
             height: 18px;
             width: auto;
             object-fit: contain;
             cursor: pointer;
             user-select: none;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .navbar.active .logo {
+            opacity: 0;
+            pointer-events: none;
         }
 
         .logo-dark {
@@ -283,13 +298,13 @@
         }
 
         .top-toast.show {
-            top: 44px;
+            top: 48px;
         }
 
         /* Menu Button Animation & Styling */
         .menu-button {
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             position: relative;
             display: flex;
             align-items: center;
@@ -332,16 +347,16 @@
             border-radius: 4px;
         }
 
-        /* Animated Backdrop Blur for Menu Opening */
+        /* Backdrop Overlay (No blur effect when hamburger menu is open) */
         .backdrop {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.25);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
             z-index: 999;
             opacity: 0;
             pointer-events: none;
@@ -359,8 +374,9 @@
             display: flex;
             flex-direction: column;
             gap: 4px;
-            height: calc(100dvh - 44px);
+            height: calc(100dvh - 48px);
             overflow-y: auto;
+            background: var(--bg-color);
         }
 
         .nav-item {
@@ -369,7 +385,7 @@
             font-size: 21px;
             font-weight: 500;
             padding: 20px 0;
-            border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+            border-bottom: 1px solid var(--border-color);
             cursor: pointer;
             opacity: 0;
             transform: translateY(-10px);
@@ -447,7 +463,7 @@
         }
 
         .lang-options div:hover {
-            background-color: rgba(128, 128, 128, 0.15);
+            background-color: var(--border-color);
         }
 
         /* Theme Toggle Controls & Integrated Splash Screen Setting Row */
@@ -469,7 +485,7 @@
 
         .theme-btn {
             background: none;
-            border: 1px solid rgba(128, 128, 128, 0.3);
+            border: 1px solid var(--border-color);
             border-radius: 50%;
             width: 42px;
             height: 42px;
@@ -526,7 +542,7 @@
             position: absolute;
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(128, 128, 128, 0.3);
+            background-color: var(--border-color);
             transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             border-radius: 24px;
         }
@@ -538,14 +554,14 @@
             width: 18px;
             left: 3px;
             bottom: 3px;
-            background-color: var(--slider-knob-bg); /* White in light mode, Black in dark mode */
+            background-color: var(--slider-knob-bg);
             transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             border-radius: 50%;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .splash-switch input:checked + .splash-slider {
-            background-color: var(--toggle-active-bg); /* Black when enabled in light mode, White when enabled in dark mode */
+            background-color: var(--toggle-active-bg);
         }
 
         .splash-switch input:checked + .splash-slider:before {
@@ -568,9 +584,9 @@
             }
         }
 
-        /* Hero Section - Matching top space with left padding (14px) */
+        /* Hero Section - Adjusted for 48px top bar */
         .hero {
-            margin-top: 44px;
+            margin-top: 48px;
             padding: 24px 24px 70px 24px;
             text-align: center;
         }
@@ -677,7 +693,7 @@
             background: var(--glass-bg);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(128, 128, 128, 0.2);
+            border: 1px solid var(--border-color);
             padding: 10px 20px;
             border-radius: 30px;
             display: flex;
@@ -796,14 +812,14 @@
     <!-- Top Notification Toast -->
     <div class="top-toast" id="topToast" data-key="alreadyOnTopMsg">Веќе сте на врвот</div>
 
-    <!-- Top Bar Navigation (Thin Apple Style) -->
+    <!-- Top Bar Navigation (48px Thickness) -->
     <nav class="navbar" id="navbar">
         <div class="nav-header">
-            <!-- Top Bar Logos: shifted ~10px more left -->
+            <!-- Top Bar Logos: Fade out when menu opens, fade back in when menu closes -->
             <img src="./blacklogo.png" alt="Majstor MOMO Logo" class="logo logo-light" id="navLogoLight" onclick="handleLogoClick()">
             <img src="./whitelogo.png" alt="Majstor MOMO Logo" class="logo logo-dark" id="navLogoDark" onclick="handleLogoClick()">
             
-            <!-- Menu Toggle Button: shifted ~10px more right -->
+            <!-- Menu Toggle Button -->
             <button
                 class="menu-button"
                 id="menuToggleBtn"
@@ -883,7 +899,7 @@
         </div>
     </nav>
 
-    <!-- Animated Page Blur Overlay -->
+    <!-- Backdrop Overlay -->
     <div class="backdrop" id="backdrop" onclick="closeMenu()"></div>
 
     <!-- Main Content -->
@@ -970,7 +986,6 @@
         const isSplashEnabled = savedSplashSetting === null ? true : (savedSplashSetting === 'enabled');
 
         if (!isSplashEnabled) {
-            // Remove splash screen overlay instantly
             splashScreen.style.display = 'none';
             document.body.classList.remove('splash-active');
         }
@@ -1017,6 +1032,9 @@
             navbar.classList.remove('items-visible');
             navbar.style.maxHeight = '';
             navbar.style.height = '';
+            navbar.style.backgroundColor = '';
+            navbar.style.backdropFilter = '';
+            navbar.style.webkitBackdropFilter = '';
             langOptions.classList.remove('active');
             backdrop.classList.remove('active');
             document.body.classList.remove('menu-open');
@@ -1039,7 +1057,7 @@
         }
 
         navbar.addEventListener('touchstart', (e) => {
-            if (window.innerWidth > 768) return; // Mobile only
+            if (window.innerWidth > 768) return;
             if (navbar.classList.contains('active')) return;
 
             pullStartY = e.touches[0].clientY;
@@ -1058,15 +1076,15 @@
                     window.addEventListener('touchmove', preventScrollRefresh, { passive: false });
                 }
 
-                const newHeight = Math.min(44 + deltaY, window.innerHeight);
+                const newHeight = Math.min(48 + deltaY, window.innerHeight);
                 navbar.classList.add('pulling');
                 navbar.style.maxHeight = `${newHeight}px`;
                 navbar.style.height = `${newHeight}px`;
 
-                // Progressively fade backdrop while pulling
-                const progress = Math.min(deltaY / 250, 1);
-                backdrop.style.opacity = progress;
-                backdrop.style.pointerEvents = 'auto';
+                // Remove transparency blur while pulling open
+                navbar.style.backgroundColor = 'var(--bg-color)';
+                navbar.style.backdropFilter = 'none';
+                navbar.style.webkitBackdropFilter = 'none';
             }
         }, { passive: false });
 
@@ -1080,14 +1098,14 @@
             }
 
             navbar.classList.remove('pulling');
-            backdrop.style.opacity = '';
-            backdrop.style.pointerEvents = '';
+            navbar.style.backgroundColor = '';
+            navbar.style.backdropFilter = '';
+            navbar.style.webkitBackdropFilter = '';
 
             const endY = e.changedTouches ? e.changedTouches[0].clientY : pullStartY;
             const pulledDistance = endY - pullStartY;
 
             if (pulledDistance > 60) {
-                // Expand completely to full screen
                 menuToggleBtn.classList.add("active");
                 menuToggleBtn.setAttribute("aria-expanded", "true");
                 menuToggleBtn.setAttribute("aria-label", "Close menu");
@@ -1099,7 +1117,6 @@
                 backdrop.classList.add('active');
                 document.body.classList.add('menu-open');
             } else {
-                // Revert pulling effect
                 navbar.style.maxHeight = '';
                 navbar.style.height = '';
                 backdrop.classList.remove('active');
@@ -1518,8 +1535,6 @@
 
         let isSlideshowInView = false;
         let isFooterInView = false;
-
-        let lastScrollY = window.scrollY;
 
         function updateControlsVisibility() {
             if (isSlideshowInView && !isFooterInView) {
